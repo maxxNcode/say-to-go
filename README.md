@@ -114,7 +114,7 @@ Before using SAY TO GO, you'll need:
 1. In Netlify, go to your site settings
 2. Navigate to "Build & deploy" → "Environment"
 3. Add an environment variable:
-   - Key: `MAPILLARY_ACCESS_TOKEN`
+   - Key: `REACT_APP_MAPILLARY_ACCESS_TOKEN` (Note the REACT_APP_ prefix)
    - Value: Your actual Mapillary API token
 
 #### Method 2: Manual File Upload

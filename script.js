@@ -387,10 +387,18 @@ async function showMapillaryView(lat, lon, locationName) {
         // Add a small delay to ensure DOM has fully rendered before initializing viewer
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Use Mapillary access token from config or environment
-        const MAPILLARY_ACCESS_TOKEN = process.env.MAPILLARY_ACCESS_TOKEN || 
-                                     window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
-                                     'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        // Use Mapillary access token from various possible sources
+        // For Netlify: Use REACT_APP_MAPILLARY_ACCESS_TOKEN environment variable
+        // For other platforms or local development: Use config.js or placeholder
+        const MAPILLARY_ACCESS_TOKEN = 
+            // Check for Netlify environment variable (available at build time)
+            (typeof process !== 'undefined' && process.env && process.env.REACT_APP_MAPILLARY_ACCESS_TOKEN) ||
+            // Check for standard environment variable
+            (typeof process !== 'undefined' && process.env && process.env.MAPILLARY_ACCESS_TOKEN) ||
+            // Check for token in window object (from config.js)
+            window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
+            // Fallback to placeholder
+            'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
@@ -534,10 +542,18 @@ async function findNearestCityWithImagery(lat, lon, originalLocationName) {
     console.log('Searching for nearest city with imagery to:', { lat, lon, originalLocationName });
     
     try {
-        // Use Mapillary access token from config or environment
-        const MAPILLARY_ACCESS_TOKEN = process.env.MAPILLARY_ACCESS_TOKEN || 
-                                     window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
-                                     'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        // Use Mapillary access token from various possible sources
+        // For Netlify: Use REACT_APP_MAPILLARY_ACCESS_TOKEN environment variable
+        // For other platforms or local development: Use config.js or placeholder
+        const MAPILLARY_ACCESS_TOKEN = 
+            // Check for Netlify environment variable (available at build time)
+            (typeof process !== 'undefined' && process.env && process.env.REACT_APP_MAPILLARY_ACCESS_TOKEN) ||
+            // Check for standard environment variable
+            (typeof process !== 'undefined' && process.env && process.env.MAPILLARY_ACCESS_TOKEN) ||
+            // Check for token in window object (from config.js)
+            window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
+            // Fallback to placeholder
+            'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
