@@ -11,15 +11,13 @@ Experience different places virtually by simply speaking the location name. SAY 
 
 ## Features
 
-- 🗣️ **Voice Recognition**: Speak any location name to teleport instantly
-- 🌍 **Global Coverage**: Explore cities, landmarks, and locations worldwide
-- 🖼️ **360° Views**: Experience immersive street-level imagery powered by Mapillary
-- 🎨 **Beautiful UI**: Modern, animated interface with interactive elements
-- 📱 **Responsive Design**: Works on desktop and mobile devices
-- 🔍 **Smart Suggestions**: Get helpful suggestions for better location searches
-- 🌐 **Automatic Country Detection**: Search any country without manual configuration
-- 🏙️ **Nearby City Finder**: Automatically finds nearby cities with imagery when direct coverage is unavailable
-- ℹ️ **Separate About Page**: Learn more about the project and creator (Mark Froilan Lendio, BSIT student at University of Cebu) with dedicated about page
+- **Voice Recognition**: Speak any location name to teleport instantly
+- **Global Coverage**: Explore cities, landmarks, and locations worldwide
+- **360° Views**: Experience immersive street-level imagery powered by Mapillary
+- **Simple Clean UI**: Simple and clean interface
+- **Responsive Design**: Works on desktop and mobile devices
+- **Nearby Location**: Automatically finds nearby locations with imagery when direct coverage is unavailable
+- **Separate About Page**: Learn more about the project and creator (Mark Froilan Lendio, BSIT student at University of Cebu) with dedicated about page
 
 ## Technologies Used
 
