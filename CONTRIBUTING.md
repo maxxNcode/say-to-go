@@ -16,7 +16,7 @@ By participating in this project, you agree to abide by our Code of Conduct:
 
 If you find a bug or have a feature request:
 
-1. Check if the issue already exists in the [issue tracker](https://github.com/maxxNcode/SAYTOGO/issues)
+1. Check if the issue already exists in the [issue tracker](https://github.com/maxxNcode/say-to-go/issues)
 2. If not, create a new issue with:
    - A clear, descriptive title
    - Detailed steps to reproduce the problem (for bugs)
@@ -41,7 +41,7 @@ We welcome ideas for new features or improvements:
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/SAYTOGO.git
+   git clone https://github.com/your-username/say-to-go.git
    ```
 3. Create a new branch for your feature or bug fix:
    ```bash
@@ -87,9 +87,9 @@ We welcome ideas for new features or improvements:
 ### Project Structure
 
 ```
-SAYTOGO/
+say-to-go/
 ├── index.html          # Main HTML structure
-├── button-inspiration.css  # UI styling and animations
+├── style.css           # UI styling and animations
 ├── script.js           # Main application logic
 ├── README.md           # Project documentation
 ├── USAGE.md            # Usage instructions

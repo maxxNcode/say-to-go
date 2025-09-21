@@ -11,7 +11,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 ### Steps
 
 1. **Fork the Repository**
-   - Go to https://github.com/maxxNcode/SAYTOGO
+   - Go to https://github.com/maxxNcode/say-to-go
    - Click the "Fork" button in the top right
    - Select your GitHub account as the destination
 
@@ -25,7 +25,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 
 3. **Access Your Deployed Site**
    - After a few minutes, your site will be available at:
-     `https://your-username.github.io/SAYTOGO/`
+     `https://your-username.github.io/say-to-go/`
    - GitHub will show the URL in the Pages section of settings
 
 ### Custom Domain (Optional)
@@ -51,7 +51,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 2. **Select Repository**
    - Choose your Git provider (GitHub, GitLab, or Bitbucket)
    - Authorize Netlify to access your repositories
-   - Select the SAYTOGO repository
+   - Select the say-to-go repository
 
 3. **Configure Deployment Settings**
    - Branch to deploy: main (or master)
@@ -81,7 +81,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 1. **Import Project**
    - Go to https://vercel.com/dashboard
    - Click "New Project"
-   - Import the SAYTOGO repository from GitHub
+   - Import the say-to-go repository from GitHub
 
 2. **Configure Project**
    - Framework Preset: Other
@@ -133,7 +133,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 ### Steps
 
 1. **Copy Files**
-   - Copy all files from the SAYTOGO repository to your Apache document root
+   - Copy all files from the say-to-go repository to your Apache document root
    - Or create a subdirectory in your document root for the application
 
 2. **Configure Apache (if needed)**
@@ -152,7 +152,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 ### Steps
 
 1. **Copy Files**
-   - Copy all files from the SAYTOGO repository to your Nginx document root
+   - Copy all files from the say-to-go repository to your Nginx document root
    - Or create a subdirectory in your document root for the application
 
 2. **Configure Nginx**
@@ -161,7 +161,7 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
      server {
          listen 80;
          server_name your-domain.com;
-         root /path/to/SAYTOGO;
+         root /path/to/say-to-go;
          index index.html;
          
          location / {

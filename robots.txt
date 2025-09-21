@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://maxxncode.github.io/SAYTOGO/sitemap.xml
+Sitemap: https://github.com/maxxNcode/say-to-go/blob/314c59e57a28ef6e3015448606fddf083f2675a9/sitemap.xml
