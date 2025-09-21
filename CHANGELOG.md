@@ -5,6 +5,37 @@ All notable changes to the SAY TO GO project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-09-22
+
+### Added
+- Separate about page with comprehensive project information
+- Creator information (Mark Froilan Lendio, BSIT student at University of Cebu)
+- Social links to GitHub and LinkedIn profiles
+- Dedicated about.html page with clean, user-friendly design
+
+### Changed
+- Moved about button to top right of screen as a simple text button
+- Removed background from about section
+- Simplified about section design
+- Creator information now appears first in the about content
+
+### Removed
+- Old inline about section in index.html
+- Complex styling for previous about section
+
+## [1.0.2] - 2025-09-22
+
+### Added
+- Enhanced about section with detailed project information
+- Creator information (Mark Froilan Lendio) and project motivation
+- Updated documentation to reflect enhanced about section
+
+### Updated
+- README.md with information about enhanced about section
+- FEATURES.md with detailed about section features
+- USAGE.md with information about accessing the about section
+- TROUBLESHOOTING.md with guidance on accessing project information
+
 ## [1.0.1] - 2025-09-22
 
 ### Security

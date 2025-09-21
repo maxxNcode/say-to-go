@@ -107,7 +107,8 @@ Once a location loads, you can navigate the 360° view using:
 
 1. **Back to Search**: Returns you to the main screen to search for another location
 2. **Next Near Area**: Finds and loads a nearby location with available 360° imagery
-3. **Status Messages**: Provides feedback on the current operation
+3. **About**: Learn more about the project, creator (Mark Froilan Lendio, BSIT student at University of Cebu), and how it works by clicking the "About" link at the top right
+4. **Status Messages**: Provides feedback on the current operation
 
 ## Best Practices for Voice Recognition
 

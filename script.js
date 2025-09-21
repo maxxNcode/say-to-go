@@ -9,6 +9,8 @@ const errorMessage = document.getElementById('error-message');
 const appHeader = document.querySelector('.app-header');
 const appFooter = document.querySelector('.app-footer');
 const experienceAudio = document.getElementById('experience-audio');
+// About button element
+const aboutButton = document.getElementById('about-btn');
 
 // Mapillary variables
 let mapillaryViewer;
@@ -136,6 +138,14 @@ if (micButton) {
                 showError('Error starting voice recognition. Please try again. Technical details: ' + error.message);
             }
         }
+    });
+}
+
+// About button event listener
+if (aboutButton) {
+    aboutButton.addEventListener('click', () => {
+        // Redirect to the about page
+        window.location.href = 'about.html';
     });
 }
 
@@ -388,13 +398,10 @@ async function showMapillaryView(lat, lon, locationName) {
         await new Promise(resolve => setTimeout(resolve, 100));
         
         // Use Mapillary access token from various possible sources
-        // For Netlify: Use REACT_APP_MAPILLARY_ACCESS_TOKEN environment variable
-        // For other platforms or local development: Use config.js or placeholder
+        // For plain JavaScript apps deployed to Netlify: Upload config.js directly
+        // For local development: Use config.js
+        // Environment variables in plain JS apps are not directly accessible at runtime
         const MAPILLARY_ACCESS_TOKEN = 
-            // Check for Netlify environment variable (available at build time)
-            (typeof process !== 'undefined' && process.env && process.env.REACT_APP_MAPILLARY_ACCESS_TOKEN) ||
-            // Check for standard environment variable
-            (typeof process !== 'undefined' && process.env && process.env.MAPILLARY_ACCESS_TOKEN) ||
             // Check for token in window object (from config.js)
             window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
             // Fallback to placeholder
@@ -402,7 +409,7 @@ async function showMapillaryView(lat, lon, locationName) {
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
-            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers. For Netlify deployments, upload a config.js file with your token directly to your site.');
         }
         
         // Try multiple bounding box sizes to find images, including larger areas for countries like Canada
@@ -529,7 +536,7 @@ async function showMapillaryView(lat, lon, locationName) {
         
         // Provide specific guidance for OAuth errors
         if (error.message.includes('access token is invalid') || error.message.includes('OAuthException') || error.message.includes('missing or invalid')) {
-            showError(`${error.message}\n\nPlease obtain a valid Mapillary API token from https://www.mapillary.com/dashboard/developers and configure it properly for your deployment platform.`);
+            showError(`${error.message}\n\nPlease obtain a valid Mapillary API token from https://www.mapillary.com/dashboard/developers. For Netlify deployments, upload a config.js file with your token directly to your site.`);
         } else {
             showError(`360° view not available for "${locationName}". Please try another location. Error: ${error.message}`);
         }
@@ -542,22 +549,12 @@ async function findNearestCityWithImagery(lat, lon, originalLocationName) {
     console.log('Searching for nearest city with imagery to:', { lat, lon, originalLocationName });
     
     try {
-        // Use Mapillary access token from various possible sources
-        // For Netlify: Use REACT_APP_MAPILLARY_ACCESS_TOKEN environment variable
-        // For other platforms or local development: Use config.js or placeholder
-        const MAPILLARY_ACCESS_TOKEN = 
-            // Check for Netlify environment variable (available at build time)
-            (typeof process !== 'undefined' && process.env && process.env.REACT_APP_MAPILLARY_ACCESS_TOKEN) ||
-            // Check for standard environment variable
-            (typeof process !== 'undefined' && process.env && process.env.MAPILLARY_ACCESS_TOKEN) ||
-            // Check for token in window object (from config.js)
-            window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
-            // Fallback to placeholder
-            'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        // Use Mapillary access token from window object (from config.js)
+        const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
-            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers. For Netlify deployments, upload a config.js file with your token directly to your site.');
         }
         
         // Define expanding search parameters

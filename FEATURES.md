@@ -44,6 +44,21 @@ When searching for general regions or countries, SAY TO GO provides helpful sugg
 - Searching for "Africa" suggests "Cairo, Egypt" or "Cape Town, South Africa"
 - Searching for "China" suggests "Great Wall of China, Beijing" or "Shanghai, China"
 
+### 5. About Section
+The app includes an informative about section that provides users with detailed information about the project.
+
+**Features:**
+- Separate about page with comprehensive project information
+- Creator information (Mark Froilan Lendio, BSIT student at University of Cebu)
+- Links to social profiles and GitHub
+- Project overview and description
+- Step-by-step usage instructions
+- Comprehensive list of features
+- Information about technologies used
+- Project motivation details
+- License information
+- Simple text button at the top right of the main screen
+
 ## User Interface Features
 
 ### 1. Animated Button Interface
@@ -87,6 +102,12 @@ Full navigation within the 360° viewer:
 - Scroll to zoom in and out
 - Click navigation arrows to move between connected images
 - Keyboard navigation support (browser dependent)
+
+### 4. About Section
+Access detailed information about the project:
+- Click the "ABOUT" button on the main screen
+- Read comprehensive project information
+- Close the about section to return to the main interface
 
 ## Technical Features
 

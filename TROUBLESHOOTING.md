@@ -171,6 +171,12 @@ To test if external APIs are working:
    - OpenStreetMap Nominatim: `https://nominatim.openstreetmap.org/search?q=London&format=json`
    - Mapillary Images: `https://graph.mapillary.com/images?access_token=YOUR_TOKEN&fields=id&bbox=0,0,1,1&limit=1`
 
+### Accessing Project Information
+To learn more about the project:
+1. Click the "ABOUT" button on the main screen
+2. Read about the project features, creator, and technologies used
+3. Close the about section using the "CLOSE" button
+
 ### Creating an Issue
 If you're still having problems:
 1. Check existing issues on GitHub

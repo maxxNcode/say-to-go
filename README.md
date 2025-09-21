@@ -1,7 +1,7 @@
 # SAY TO GO - Voice-Powered Teleportation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/SAYTOGO)](https://github.com/maxxNcode/SAYTOGO)
+[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/say-to-go)](https://github.com/maxxNcode/say-to-go)
 
 Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
@@ -19,6 +19,7 @@ Experience different places virtually by simply speaking the location name. SAY 
 - 🔍 **Smart Suggestions**: Get helpful suggestions for better location searches
 - 🌐 **Automatic Country Detection**: Search any country without manual configuration
 - 🏙️ **Nearby City Finder**: Automatically finds nearby cities with imagery when direct coverage is unavailable
+- ℹ️ **Separate About Page**: Learn more about the project and creator (Mark Froilan Lendio, BSIT student at University of Cebu) with dedicated about page
 
 ## Technologies Used
 
@@ -110,23 +111,31 @@ Before using SAY TO GO, you'll need:
 2. Deploy your site to Netlify using your preferred method (GitHub integration, drag-and-drop, etc.)
 3. After deployment, configure your Mapillary API token using one of these methods:
 
-#### Method 1: Environment Variables (Recommended)
+#### Method 1: Manual File Upload (Recommended for Plain JavaScript Apps)
+1. Create a `config.js` file locally with your token:
+   ```javascript
+   const MAPILLARY_CONFIG = {
+     ACCESS_TOKEN: 'your_actual_mapillary_access_token_here'
+   };
+   window.MAPILLARY_CONFIG = MAPILLARY_CONFIG;
+   ```
+2. Replace `your_actual_mapillary_access_token_here` with your actual Mapillary API token
+3. Upload this file directly to your Netlify site through the file management interface
+
+#### Method 2: Environment Variables (For React Apps Only)
+**Note**: This method only works for React applications, not plain JavaScript apps like this one.
 1. In Netlify, go to your site settings
 2. Navigate to "Build & deploy" → "Environment"
 3. Add an environment variable:
-   - Key: `REACT_APP_MAPILLARY_ACCESS_TOKEN` (Note the REACT_APP_ prefix)
+   - Key: `REACT_APP_MAPILLARY_ACCESS_TOKEN`
    - Value: Your actual Mapillary API token
-
-#### Method 2: Manual File Upload
-1. Create a `config.js` file locally with your token
-2. Upload it directly to your Netlify site through the file management interface
 
 ### Deploying to Other Platforms
 
 For other hosting platforms:
-- **GitHub Pages**: Use environment variables in your build process
-- **Vercel**: Use environment variables in your project settings
-- **Firebase**: Use runtime configuration or environment variables
+- **GitHub Pages**: Upload config.js file directly or use build process with environment variables
+- **Vercel**: Upload config.js file directly or use environment variables
+- **Firebase**: Upload config.js file directly or use runtime configuration
 
 **Security Reminder**: Never commit API tokens to public repositories!
 
@@ -144,6 +153,7 @@ For other hosting platforms:
    - Click navigation arrows to move between images
 8. Use the "Back to Search" button to return to the main screen
 9. Try the "Next Near Area" button to explore nearby locations
+10. Click the "ABOUT" button to learn more about the project
 
 ## Browser Support
 
