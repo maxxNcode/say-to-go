@@ -17,6 +17,8 @@ Experience different places virtually by simply speaking the location name. SAY 
 - 🎨 **Beautiful UI**: Modern, animated interface with interactive elements
 - 📱 **Responsive Design**: Works on desktop and mobile devices
 - 🔍 **Smart Suggestions**: Get helpful suggestions for better location searches
+- 🌐 **Automatic Country Detection**: Search any country without manual configuration
+- 🏙️ **Nearby City Finder**: Automatically finds nearby cities with imagery when direct coverage is unavailable
 
 ## Technologies Used
 
@@ -51,6 +53,8 @@ Before using SAY TO GO, you'll need:
 3. Create a new application
 4. Copy your access token
 
+**Important**: Mapillary API tokens can expire. If you encounter errors with the 360° view, obtain a new token from the dashboard.
+
 ### 2. Configure the Application
 
 1. Copy `config.example.js` to `config.js`:
@@ -72,8 +76,10 @@ Before using SAY TO GO, you'll need:
 1. **Voice Input**: Click the "SPEAK LOCATION" button and say any location name
 2. **Speech Recognition**: The Web Speech API converts your voice to text
 3. **Geocoding**: OpenStreetMap Nominatim translates the location name to coordinates
-4. **Image Search**: Mapillary API finds the nearest available 360° imagery
-5. **Immersive View**: The 360° viewer displays the location with full navigation controls
+4. **Coverage Check**: The app automatically checks for Mapillary coverage at the location
+5. **Nearby Search**: If no direct imagery is available, the app searches for nearby cities with coverage
+6. **Image Search**: Mapillary API finds the nearest available 360° imagery
+7. **Immersive View**: The 360° viewer displays the location with full navigation controls
 
 ## Installation
 
@@ -101,14 +107,15 @@ Before using SAY TO GO, you'll need:
 1. Open the application in a supported browser
 2. Click the green "SPEAK LOCATION" button
 3. Allow microphone access when prompted
-4. Clearly speak the name of a location (e.g., "Eiffel Tower, Paris")
+4. Clearly speak the name of a location (e.g., "Eiffel Tower, Paris" or "China")
 5. Wait for the app to process your request
-6. Explore the 360° view using mouse/touch controls:
+6. If the exact location has no imagery, the app will automatically find the nearest city with available imagery
+7. Explore the 360° view using mouse/touch controls:
    - Drag to look around
    - Scroll to zoom in/out
    - Click navigation arrows to move between images
-7. Use the "Back to Search" button to return to the main screen
-8. Try the "Next Near Area" button to explore nearby locations
+8. Use the "Back to Search" button to return to the main screen
+9. Try the "Next Near Area" button to explore nearby locations
 
 ## Browser Support
 
@@ -133,10 +140,13 @@ Before using SAY TO GO, you'll need:
 3. **Location Not Found**
    - Try more specific location names (e.g., "Times Square, New York" instead of just "New York")
    - Use well-known landmarks for better results
+   - The app now automatically searches for major cities within countries
 
 4. **360° View Not Available**
-   - Some locations have limited or no street-level imagery
+   - Some locations have limited or no street-level imagery (like the Great Wall of China)
+   - The app now automatically finds nearby cities with available imagery
    - Try nearby areas using the "Next Near Area" button
+   - **Check that your Mapillary API token is valid and properly configured**
 
 ### Network Issues
 

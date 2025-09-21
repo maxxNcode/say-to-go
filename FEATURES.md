@@ -23,6 +23,7 @@ Using OpenStreetMap's Nominatim service, the app converts location names into ge
 - Provides intelligent suggestions for common regions
 - Falls back to major cities when searching for countries or regions
 - Handles common location name variations
+- Automatically searches for nearby cities with imagery when direct coverage is unavailable
 
 ### 3. 360° Street-Level Imagery
 The app integrates with Mapillary's API to display interactive 360° street-level imagery of locations.
@@ -32,6 +33,7 @@ The app integrates with Mapillary's API to display interactive 360° street-leve
 - Zoom in/out functionality
 - Movement between connected imagery points
 - Location information display
+- Automatic fallback to nearby areas with available imagery
 
 ### 4. Intelligent Location Suggestions
 When searching for general regions or countries, SAY TO GO provides helpful suggestions for specific locations.
@@ -40,6 +42,7 @@ When searching for general regions or countries, SAY TO GO provides helpful sugg
 - Searching for "Europe" suggests "Paris, France" or "London, UK"
 - Searching for "Canada" suggests "Toronto, Canada" or "Vancouver, Canada"
 - Searching for "Africa" suggests "Cairo, Egypt" or "Cape Town, South Africa"
+- Searching for "China" suggests "Great Wall of China, Beijing" or "Shanghai, China"
 
 ## User Interface Features
 
@@ -109,6 +112,8 @@ Comprehensive error handling for:
 - Suggests alternative locations when searches fail
 - Tries multiple geographic areas for better results
 - Provides helpful error messages with solutions
+- **Automatically finds nearby cities with imagery when direct coverage is unavailable**
+- **Expands search radius to find locations with available street-level imagery**
 
 ## Accessibility Features
 

@@ -50,6 +50,7 @@ This guide helps you resolve common issues you might encounter while using SAY T
 1. Try the "Next Near Area" button to find nearby locations with imagery
 2. Search for well-known tourist areas or city centers
 3. Try a different, major city nearby
+4. The app now automatically searches for nearby cities with available imagery when direct coverage is unavailable
 
 ## Mapillary/360° View Issues
 
@@ -68,6 +69,13 @@ This guide helps you resolve common issues you might encounter while using SAY T
 2. Clear your browser cache and cookies
 3. Try using an incognito/private browsing window
 4. Check browser console for error messages (F12 Developer Tools)
+
+### Problem: Mapillary API 400 errors
+**Cause**: Invalid or expired Mapillary API token
+**Solution**:
+1. Obtain a new Mapillary API token from [Mapillary Developer Dashboard](https://www.mapillary.com/dashboard/developers)
+2. Update your `config.js` file with the new token
+3. Make sure you've properly configured the `config.js` file (see Setup Instructions in README.md)
 
 ## Browser-Specific Issues
 
@@ -143,8 +151,9 @@ This guide helps you resolve common issues you might encounter while using SAY T
 ### Problem: Console errors related to Mapillary
 **Cause**: Invalid or expired API token
 **Solution**:
-1. Check that the Mapillary access token in script.js is valid
+1. Check that the Mapillary access token in config.js is valid
 2. Obtain a new token from Mapillary if needed
+3. Make sure you've properly configured the config.js file
 
 ## Advanced Troubleshooting
 

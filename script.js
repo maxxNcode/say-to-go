@@ -162,7 +162,8 @@ function processLocation(location) {
         'australia': 'Sydney, Australia',
         'antarctica': 'McMurdo Station, Antarctica',
         'middle east': 'Dubai, UAE',
-        'canada': 'Toronto, Canada'  // Add specific suggestion for Canada
+        'canada': 'Toronto, Canada',
+        'china': 'Great Wall of China, Beijing'
     };
     
     // Provide helpful tips for common regions
@@ -174,7 +175,8 @@ function processLocation(location) {
         'south america': 'Note: Try specific cities like Rio de Janeiro, Brazil or Buenos Aires, Argentina',
         'australia': 'Note: Try specific cities like Sydney, Australia or Melbourne, Australia',
         'middle east': 'Note: Try specific cities like Dubai, UAE or Istanbul, Turkey',
-        'canada': 'Note: Try specific cities like Toronto, Vancouver, or Montreal'
+        'canada': 'Note: Try specific cities like Toronto, Vancouver, or Montreal',
+        'china': 'Note: Try specific cities like Beijing, Shanghai, or landmarks like the Great Wall of China'
     };
     
     const normalizedLocation = location.toLowerCase().trim();
@@ -203,8 +205,9 @@ function processLocation(location) {
 async function geocodeLocation(location) {
     console.log('Geocoding location:', location);
     try {
+        // First, try the exact location as provided
         const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=5`,
             {
                 headers: {
                     'User-Agent': 'SAY TO GO App/1.0 (Educational Project)'
@@ -221,66 +224,129 @@ async function geocodeLocation(location) {
         console.log('Geocoding response data:', data);
         
         if (data.length > 0) {
-            const lat = parseFloat(data[0].lat);
-            const lon = parseFloat(data[0].lon);
-            console.log('Geocoded location:', { lat, lon });
-            showMapillaryView(lat, lon, location);
-        } else {
-            // Try fallback locations for common regions
-            const fallbackLocations = {
-                'africa': ['Cairo, Egypt', 'Cape Town, South Africa', 'Lagos, Nigeria'],
-                'asia': ['Tokyo, Japan', 'Bangkok, Thailand', 'Singapore'],
-                'europe': ['Paris, France', 'London, UK', 'Rome, Italy'],
-                'north america': ['New York, USA', 'Toronto, Canada', 'Mexico City, Mexico'],
-                'south america': ['Rio de Janeiro, Brazil', 'Buenos Aires, Argentina', 'Lima, Peru'],
-                'australia': ['Sydney, Australia', 'Melbourne, Australia', 'Brisbane, Australia'],
-                'middle east': ['Dubai, UAE', 'Istanbul, Turkey', 'Tel Aviv, Israel'],
-                'canada': ['Toronto, Canada', 'Vancouver, Canada', 'Montreal, Canada']  // Add specific fallbacks for Canada
-            };
-            
-            const normalizedLocation = location.toLowerCase();
-            const fallbacks = fallbackLocations[normalizedLocation];
-            
-            if (fallbacks && fallbacks.length > 0) {
-                console.log(`Trying fallback locations for ${location}`);
-                statusText.textContent = `Searching for "${location}"... Trying alternative locations.`;
+            // Try multiple results to find the best one with Mapillary coverage
+            for (const result of data) {
+                const lat = parseFloat(result.lat);
+                const lon = parseFloat(result.lon);
+                const displayName = result.display_name || location;
                 
-                for (const fallback of fallbacks) {
-                    try {
-                        console.log(`Trying fallback location: ${fallback}`);
-                        statusText.textContent = `Searching for "${location}"... Checking ${fallback}.`;
-                        
-                        const fallbackResponse = await fetch(
-                            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fallback)}&format=json&limit=1`,
-                            {
-                                headers: {
-                                    'User-Agent': 'SAY TO GO App/1.0 (Educational Project)'
-                                }
-                            }
-                        );
-                        
-                        if (fallbackResponse.ok) {
-                            const fallbackData = await fallbackResponse.json();
-                            if (fallbackData.length > 0) {
-                                const lat = parseFloat(fallbackData[0].lat);
-                                const lon = parseFloat(fallbackData[0].lon);
-                                console.log('Geocoded fallback location:', { lat, lon });
-                                showMapillaryView(lat, lon, fallback);
-                                return;
-                            }
-                        }
-                    } catch (fallbackError) {
-                        console.log(`Fallback location ${fallback} failed:`, fallbackError);
-                    }
+                console.log('Trying location:', { lat, lon, displayName });
+                statusText.textContent = `Checking availability for "${displayName}"...`;
+                
+                // Check if this location has Mapillary coverage
+                if (await checkMapillaryCoverage(lat, lon)) {
+                    console.log('Found location with Mapillary coverage:', { lat, lon, displayName });
+                    showMapillaryView(lat, lon, displayName);
+                    return;
                 }
             }
             
-            throw new Error('No results found for the location');
+            // If no locations with Mapillary coverage found, use the first result
+            console.log('No locations with Mapillary coverage found, using first result');
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+            const displayName = data[0].display_name || location;
+            showMapillaryView(lat, lon, displayName);
+        } else {
+            // Try a more general search if specific location not found
+            const generalSearch = await searchGeneralLocation(location);
+            if (generalSearch) {
+                const { lat, lon, displayName } = generalSearch;
+                showMapillaryView(lat, lon, displayName);
+                return;
+            }
+            
+            throw new Error(`No results found for "${location}". Try a more specific location name.`);
         }
     } catch (error) {
         console.error('Geocoding error:', error);
         showError(`Could not find location: ${location}. Please try again. Error: ${error.message}`);
         resetUI();
+    }
+}
+
+// Check if a location has Mapillary coverage
+async function checkMapillaryCoverage(lat, lon) {
+    try {
+        const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        
+        // Try multiple bounding box sizes to find images
+        const bboxSizes = [0.001, 0.005, 0.01, 0.02];
+        
+        for (const size of bboxSizes) {
+            try {
+                console.log(`Checking Mapillary coverage with bbox size: ${size}`);
+                const response = await fetch(
+                    `https://graph.mapillary.com/images?access_token=${MAPILLARY_ACCESS_TOKEN}&fields=id&bbox=${lon-size},${lat-size},${lon+size},${lat+size}&limit=1`
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.data && data.data.length > 0) {
+                        console.log('Found Mapillary coverage');
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log(`Mapillary coverage check with bbox ${size} failed:`, error);
+            }
+        }
+        
+        console.log('No Mapillary coverage found');
+        return false;
+    } catch (error) {
+        console.log('Error checking Mapillary coverage:', error);
+        return false;
+    }
+}
+
+// Search for a general location (country, region, etc.) and find a major city within it
+async function searchGeneralLocation(location) {
+    try {
+        console.log('Searching for general location:', location);
+        statusText.textContent = `Searching for major cities in "${location}"...`;
+        
+        // Try searching for major cities within the specified region
+        const majorCitiesQuery = `${location} major city`;
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(majorCitiesQuery)}&format=json&limit=3`,
+            {
+                headers: {
+                    'User-Agent': 'SAY TO GO App/1.0 (Educational Project)'
+                }
+            }
+        );
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data.length > 0) {
+                // Try each result to find one with Mapillary coverage
+                for (const result of data) {
+                    const lat = parseFloat(result.lat);
+                    const lon = parseFloat(result.lon);
+                    const displayName = result.display_name || location;
+                    
+                    console.log('Trying general location result:', { lat, lon, displayName });
+                    
+                    if (await checkMapillaryCoverage(lat, lon)) {
+                        console.log('Found general location with Mapillary coverage:', { lat, lon, displayName });
+                        return { lat, lon, displayName };
+                    }
+                }
+                
+                // If no locations with Mapillary coverage found, use the first result
+                console.log('No general locations with Mapillary coverage found, using first result');
+                const lat = parseFloat(data[0].lat);
+                const lon = parseFloat(data[0].lon);
+                const displayName = data[0].display_name || location;
+                return { lat, lon, displayName };
+            }
+        }
+        
+        return null;
+    } catch (error) {
+        console.log('Error searching general location:', error);
+        return null;
     }
 }
 
@@ -324,6 +390,11 @@ async function showMapillaryView(lat, lon, locationName) {
         // Use Mapillary access token from config
         const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
+        // Validate that we have a proper access token
+        if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
+            throw new Error('Mapillary API access token is missing or invalid. Please check your config.js file and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+        }
+        
         // Try multiple bounding box sizes to find images, including larger areas for countries like Canada
         const bboxSizes = [0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2];
         let imageData = null;
@@ -351,16 +422,41 @@ async function showMapillaryView(lat, lon, locationName) {
                     console.warn(`Mapillary API request with bbox ${size} failed:`, errorText);
                     
                     // Check if it's an OAuth error
-                    if (response.status === 400 && errorText.includes('OAuthException')) {
-                        throw new Error('Mapillary API access token is invalid. Please check your token.');
+                    if (response.status === 400) {
+                        if (errorText.includes('OAuthException') || errorText.includes('access_token')) {
+                            throw new Error('Mapillary API access token is invalid or expired. Please check your token at https://www.mapillary.com/dashboard/developers');
+                        } else {
+                            throw new Error(`Mapillary API error (status ${response.status}): ${errorText}`);
+                        }
                     }
                 }
             } catch (error) {
                 console.warn(`Mapillary search with bbox ${size} failed:`, error.message);
+                // If it's an authentication error, stop trying other bbox sizes
+                if (error.message.includes('access token is invalid') || error.message.includes('OAuthException')) {
+                    throw error;
+                }
             }
         }
         
         if (!imageId) {
+            // For locations with no direct imagery, try to find the nearest city with imagery
+            console.log(`No direct imagery found for "${locationName}", searching for nearby cities...`);
+            statusText.textContent = `No imagery at "${locationName}", searching for nearby areas...`;
+            
+            const nearbyCity = await findNearestCityWithImagery(lat, lon, locationName);
+            if (nearbyCity) {
+                console.log('Found nearby city with imagery:', nearbyCity);
+                // Hide loading indicator
+                if (mapillaryLoading) {
+                    mapillaryLoading.classList.add('hidden');
+                }
+                
+                // Show the nearby city instead
+                showMapillaryView(nearbyCity.lat, nearbyCity.lon, nearbyCity.name);
+                return;
+            }
+            
             // Try searching for a well-known location as fallback
             const fallbackSuggestions = {
                 'africa': 'Cairo, Egypt or Cape Town, South Africa',
@@ -371,11 +467,25 @@ async function showMapillaryView(lat, lon, locationName) {
                 'australia': 'Sydney, Australia or Melbourne, Australia',
                 'middle east': 'Dubai, UAE or Istanbul, Turkey',
                 'antarctica': 'McMurdo Station, Antarctica (limited coverage)',
-                'canada': 'Toronto, Canada or Vancouver, Canada'
+                'canada': 'Toronto, Canada or Vancouver, Canada',
+                'china': 'Shanghai, China or Beijing, China'
             };
             
-            const suggestion = fallbackSuggestions[locationName.toLowerCase()] || 
-                             '"Eiffel Tower, Paris" or "Times Square, New York"';
+            const normalizedLocation = locationName.toLowerCase();
+            let suggestion = null;
+            
+            // Check for region-specific suggestions
+            for (const [region, regionSuggestion] of Object.entries(fallbackSuggestions)) {
+                if (normalizedLocation.includes(region)) {
+                    suggestion = regionSuggestion;
+                    break;
+                }
+            }
+            
+            // Default suggestion if no region-specific one found
+            if (!suggestion) {
+                suggestion = '"Eiffel Tower, Paris" or "Times Square, New York"';
+            }
             
             throw new Error(`No Mapillary images found near "${locationName}". ` +
                           `Try a more specific location like ${suggestion}. ` +
@@ -408,12 +518,94 @@ async function showMapillaryView(lat, lon, locationName) {
         if (appFooter) appFooter.classList.remove('hidden');
         
         // Provide specific guidance for OAuth errors
-        if (error.message.includes('access token is invalid')) {
-            showError(`${error.message}\n\nPlease check your Mapillary API token.`);
+        if (error.message.includes('access token is invalid') || error.message.includes('OAuthException') || error.message.includes('missing or invalid')) {
+            showError(`${error.message}\n\nPlease obtain a valid Mapillary API token from https://www.mapillary.com/dashboard/developers and update your config.js file.`);
         } else {
             showError(`360° view not available for "${locationName}". Please try another location. Error: ${error.message}`);
         }
         resetUI();
+    }
+}
+
+// Find the nearest city with Mapillary imagery
+async function findNearestCityWithImagery(lat, lon, originalLocationName) {
+    console.log('Searching for nearest city with imagery to:', { lat, lon, originalLocationName });
+    
+    try {
+        // Use Mapillary access token from config
+        const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        
+        // Validate that we have a proper access token
+        if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
+            throw new Error('Mapillary API access token is missing or invalid. Please check your config.js file and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+        }
+        
+        // Define expanding search parameters
+        const searchRadii = [0.1, 0.2, 0.5, 1.0, 2.0]; // Degrees
+        
+        // Try each radius to find a nearby city with images
+        for (const radius of searchRadii) {
+            try {
+                console.log(`Checking for cities within ${radius} degrees of ${lat}, ${lon}`);
+                
+                // First, try to find a major city within this radius using Nominatim
+                const cityResponse = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=city&bounded=1&viewbox=${lon-radius},${lat-radius},${lon+radius},${lat+radius}&limit=5`,
+                    {
+                        headers: {
+                            'User-Agent': 'SAY TO GO App/1.0 (Educational Project)'
+                        }
+                    }
+                );
+                
+                if (cityResponse.ok) {
+                    const cities = await cityResponse.json();
+                    
+                    // Try each city to see if it has Mapillary coverage
+                    for (const city of cities) {
+                        const cityLat = parseFloat(city.lat);
+                        const cityLon = parseFloat(city.lon);
+                        const cityName = city.display_name;
+                        
+                        console.log(`Checking Mapillary coverage for city: ${cityName}`);
+                        
+                        // Check if this city has Mapillary coverage
+                        const bboxSize = 0.01;
+                        const imageResponse = await fetch(
+                            `https://graph.mapillary.com/images?access_token=${MAPILLARY_ACCESS_TOKEN}&fields=id&bbox=${cityLon-bboxSize},${cityLat-bboxSize},${cityLon+bboxSize},${cityLat+bboxSize}&limit=1`
+                        );
+                        
+                        if (imageResponse.ok) {
+                            const imageData = await imageResponse.json();
+                            if (imageData.data && imageData.data.length > 0) {
+                                // Found a city with imagery
+                                console.log('Found nearby city with imagery:', { cityLat, cityLon, cityName });
+                                return { lat: cityLat, lon: cityLon, name: `${cityName} (near ${originalLocationName})` };
+                            }
+                        } else if (imageResponse.status === 400) {
+                            // Handle API errors
+                            const errorText = await imageResponse.text();
+                            if (errorText.includes('OAuthException') || errorText.includes('access_token')) {
+                                throw new Error('Mapillary API access token is invalid or expired. Please check your token at https://www.mapillary.com/dashboard/developers');
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log(`Error checking radius ${radius}:`, error);
+                // If it's an authentication error, stop searching
+                if (error.message.includes('access token is invalid') || error.message.includes('OAuthException')) {
+                    throw error;
+                }
+            }
+        }
+        
+        // If we get here, no nearby cities with images were found
+        console.log('No nearby cities with imagery found');
+        return null;
+    } catch (error) {
+        console.error('Error in findNearestCityWithImagery:', error);
+        throw error; // Re-throw to be handled by the calling function
     }
 }
 
