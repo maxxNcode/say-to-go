@@ -2,27 +2,21 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
-
-## Demo
-
-![SAY TO GO Demo](demo.gif)
+Experience different places virtually by simply speaking any landmark or city name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
 ## Features
 
-- 🗣️ **Voice Recognition**: Speak any location name to teleport instantly
-- 🌍 **Global Coverage**: Explore cities, landmarks, and locations worldwide
+- 🗣️ **Simple Voice Control**: Speak any landmark or city name to teleport instantly
 - 🖼️ **360° Views**: Experience immersive street-level imagery powered by Mapillary
-- 🎨 **Beautiful UI**: Modern, animated interface with interactive elements
+- 🎨 **Clean UI**: Simple and intuitive interface
 - 📱 **Responsive Design**: Works on desktop and mobile devices
-- 🔍 **Smart Suggestions**: Get helpful suggestions for better location searches
 
 ## Technologies Used
 
 ### Frontend
 - **HTML5**: Semantic markup and structure
-- **CSS3**: Advanced styling with animations and gradients
-- **JavaScript (ES6+)**: Modern JavaScript for interactive functionality
+- **CSS3**: Styling and animations
+- **JavaScript (ES6+)**: Interactive functionality
 
 ### APIs & Services
 - **Web Speech API**: Browser-based voice recognition (no API keys required)
@@ -68,7 +62,7 @@ Before using SAY TO GO, you'll need:
 
 ## How It Works
 
-1. **Voice Input**: Click the "SPEAK LOCATION" button and say any location name
+1. **Voice Input**: Click the "SPEAK LOCATION" button and say any landmark or city name
 2. **Speech Recognition**: The Web Speech API converts your voice to text
 3. **Geocoding**: OpenStreetMap Nominatim translates the location name to coordinates
 4. **Image Search**: Mapillary API finds the nearest available 360° imagery
@@ -100,7 +94,7 @@ Before using SAY TO GO, you'll need:
 1. Open the application in a supported browser
 2. Click the green "SPEAK LOCATION" button
 3. Allow microphone access when prompted
-4. Clearly speak the name of a location (e.g., "Eiffel Tower, Paris")
+4. Clearly speak the name of any landmark or city (e.g., "Eiffel Tower" or "Paris")
 5. Wait for the app to process your request
 6. Explore the 360° view using mouse/touch controls:
    - Drag to look around
@@ -130,7 +124,7 @@ Before using SAY TO GO, you'll need:
    - Check that your microphone is properly connected
 
 3. **Location Not Found**
-   - Try more specific location names (e.g., "Times Square, New York" instead of just "New York")
+   - Try more specific location names
    - Use well-known landmarks for better results
 
 4. **360° View Not Available**
