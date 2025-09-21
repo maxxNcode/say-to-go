@@ -1,7 +1,7 @@
 # SAY TO GO - Voice-Powered Teleportation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/say-to-go)](https://github.com/maxxNcode/say-to-go)
+[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/SAYTOGO)](https://github.com/maxxNcode/SAYTOGO)
 
 Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
@@ -101,6 +101,34 @@ Before using SAY TO GO, you'll need:
 - HTTPS connection (except when running on localhost)
 - Microphone access permissions
 - Internet connection for API access
+
+## Deployment
+
+### Deploying to Netlify
+
+1. **DO NOT commit your `config.js` file** to version control
+2. Deploy your site to Netlify using your preferred method (GitHub integration, drag-and-drop, etc.)
+3. After deployment, configure your Mapillary API token using one of these methods:
+
+#### Method 1: Environment Variables (Recommended)
+1. In Netlify, go to your site settings
+2. Navigate to "Build & deploy" → "Environment"
+3. Add an environment variable:
+   - Key: `MAPILLARY_ACCESS_TOKEN`
+   - Value: Your actual Mapillary API token
+
+#### Method 2: Manual File Upload
+1. Create a `config.js` file locally with your token
+2. Upload it directly to your Netlify site through the file management interface
+
+### Deploying to Other Platforms
+
+For other hosting platforms:
+- **GitHub Pages**: Use environment variables in your build process
+- **Vercel**: Use environment variables in your project settings
+- **Firebase**: Use runtime configuration or environment variables
+
+**Security Reminder**: Never commit API tokens to public repositories!
 
 ## Usage
 

@@ -387,12 +387,14 @@ async function showMapillaryView(lat, lon, locationName) {
         // Add a small delay to ensure DOM has fully rendered before initializing viewer
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Use Mapillary access token from config
-        const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        // Use Mapillary access token from config or environment
+        const MAPILLARY_ACCESS_TOKEN = process.env.MAPILLARY_ACCESS_TOKEN || 
+                                     window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
+                                     'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
-            throw new Error('Mapillary API access token is missing or invalid. Please check your config.js file and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers');
         }
         
         // Try multiple bounding box sizes to find images, including larger areas for countries like Canada
@@ -519,7 +521,7 @@ async function showMapillaryView(lat, lon, locationName) {
         
         // Provide specific guidance for OAuth errors
         if (error.message.includes('access token is invalid') || error.message.includes('OAuthException') || error.message.includes('missing or invalid')) {
-            showError(`${error.message}\n\nPlease obtain a valid Mapillary API token from https://www.mapillary.com/dashboard/developers and update your config.js file.`);
+            showError(`${error.message}\n\nPlease obtain a valid Mapillary API token from https://www.mapillary.com/dashboard/developers and configure it properly for your deployment platform.`);
         } else {
             showError(`360° view not available for "${locationName}". Please try another location. Error: ${error.message}`);
         }
@@ -532,12 +534,14 @@ async function findNearestCityWithImagery(lat, lon, originalLocationName) {
     console.log('Searching for nearest city with imagery to:', { lat, lon, originalLocationName });
     
     try {
-        // Use Mapillary access token from config
-        const MAPILLARY_ACCESS_TOKEN = window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
+        // Use Mapillary access token from config or environment
+        const MAPILLARY_ACCESS_TOKEN = process.env.MAPILLARY_ACCESS_TOKEN || 
+                                     window.MAPILLARY_CONFIG?.ACCESS_TOKEN || 
+                                     'YOUR_MAPILLARY_ACCESS_TOKEN_HERE';
         
         // Validate that we have a proper access token
         if (!MAPILLARY_ACCESS_TOKEN || MAPILLARY_ACCESS_TOKEN === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
-            throw new Error('Mapillary API access token is missing or invalid. Please check your config.js file and obtain a valid token from https://www.mapillary.com/dashboard/developers');
+            throw new Error('Mapillary API access token is missing or invalid. Please check your configuration and obtain a valid token from https://www.mapillary.com/dashboard/developers');
         }
         
         // Define expanding search parameters
