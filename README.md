@@ -1,7 +1,7 @@
 # SAY TO GO - Voice-Powered Teleportation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/SAYTOGO)](https://github.com/maxxNcode/SAYTOGO)
+[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/say-to-go)](https://github.com/maxxNcode/say-to-go)
 
 Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
