@@ -1,7 +1,6 @@
 # SAY TO GO - Voice-Powered Teleportation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/maxxNcode/SAYTOGO)](https://github.com/maxxNcode/SAYTOGO)
 
 Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
@@ -79,12 +78,12 @@ Before using SAY TO GO, you'll need:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/maxxNcode/SAYTOGO.git
+   git clone https://github.com/maxxNcode/say-to-go.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd SAYTOGO
+   cd say-to-go
    ```
 
 3. Set up your Mapillary API token (see Setup Instructions above)
@@ -150,10 +149,9 @@ If you're experiencing network-related problems:
 
 ### Project Structure
 ```
-SAYTOGO/
+say-to-go/
 ├── index.html          # Main HTML structure
-├── styles.css          # Custom styling
-├── button-inspiration.css  # Animated button UI
+├── style.css           # Custom styling
 ├── script.js           # Main application logic
 ├── config.example.js   # Example configuration file
 ├── config.js           # Your configuration (gitignored)
@@ -165,13 +163,13 @@ SAYTOGO/
 1. **Voice Recognition**: Implemented with Web Speech API in [script.js](script.js)
 2. **Geocoding**: Uses OpenStreetMap Nominatim API for location lookup
 3. **360° Viewer**: Powered by Mapillary JS SDK
-4. **UI Elements**: Custom CSS animations and transitions in [button-inspiration.css](button-inspiration.css)
+4. **UI Elements**: Custom CSS animations and transitions in [style.css](style.css)
 
 ### Customization
 
 To customize the application:
 
-1. **Styling**: Modify [button-inspiration.css](button-inspiration.css) for UI changes
+1. **Styling**: Modify [style.css](style.css) for UI changes
 2. **Functionality**: Edit [script.js](script.js) for core logic modifications
 3. **Content**: Update [index.html](index.html) for structural changes
 4. **Configuration**: Update [config.js](config.js) for API tokens
@@ -205,8 +203,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 1. Check the [Troubleshooting](#troubleshooting) section
-2. Review existing [issues](https://github.com/maxxNcode/SAYTOGO/issues)
-3. Create a new [issue](https://github.com/maxxNcode/SAYTOGO/issues/new) with detailed information
+2. Review existing [issues](https://github.com/maxxNcode/say-to-go/issues)
+3. Create a new [issue](https://github.com/maxxNcode/say-to-go/issues/new) with detailed information
 
 ---
 

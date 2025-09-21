@@ -89,7 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Mark Froilan Lendio ([@maxxNcode](https://github.com/maxxNcode))
 
 ### Repository
-[https://github.com/maxxNcode/SAYTOGO](https://github.com/maxxNcode/SAYTOGO)
+[https://github.com/maxxNcode/say-to-go](https://github.com/maxxNcode/say-to-go)
 
 ### License
 MIT License - see [LICENSE](LICENSE) file for details
