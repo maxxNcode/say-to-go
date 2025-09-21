@@ -882,7 +882,7 @@ function addBackButton() {
     // Create next near area button
     const nextNearAreaButton = document.createElement('button');
     nextNearAreaButton.id = 'next-near-area-button';
-    nextNearAreaButton.textContent = 'Next Near Area';
+    nextNearAreaButton.textContent = 'Near Area';
     nextNearAreaButton.style.padding = '10px 15px';
     nextNearAreaButton.style.background = '#000';
     nextNearAreaButton.style.border = '1px solid #4ecca3';
@@ -894,7 +894,7 @@ function addBackButton() {
     
     // Add event listener for next near area button
     nextNearAreaButton.addEventListener('click', async () => {
-        console.log('Next Near Area button clicked');
+        console.log('Near Area button clicked');
         console.log('Current location:', currentLocation);
         
         if (currentLocation.lat !== null && currentLocation.lon !== null) {

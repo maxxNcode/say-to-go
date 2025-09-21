@@ -410,7 +410,7 @@
   display: none !important;
 }
 
-/* Next Near Area Button */
+/* Near Area Button */
 #next-near-area-button {
   padding: 10px 15px;
   background: #000;
@@ -449,6 +449,33 @@
 
 #back-button:active {
   transform: translateY(0);
+}
+
+/* Responsive styles for Mapillary buttons on mobile */
+@media screen and (max-width: 768px) {
+  #back-button-container {
+    top: 10px !important;
+    left: 10px !important;
+    gap: 5px !important;
+  }
+  
+  #back-button, #next-near-area-button {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #back-button-container {
+    top: 5px !important;
+    left: 5px !important;
+    gap: 3px !important;
+  }
+  
+  #back-button, #next-near-area-button {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
 }
 
 /* Error Message */

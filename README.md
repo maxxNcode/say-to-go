@@ -5,10 +5,6 @@
 
 Experience different places virtually by simply speaking the location name. SAY TO GO uses voice recognition to teleport you to any location in the world with stunning 360° street-level imagery.
 
-## Demo
-
-![SAY TO GO Demo](demo.gif)
-
 ## Features
 
 - **Voice Recognition**: Speak any location name to teleport instantly
@@ -150,7 +146,7 @@ For other hosting platforms:
    - Scroll to zoom in/out
    - Click navigation arrows to move between images
 8. Use the "Back to Search" button to return to the main screen
-9. Try the "Next Near Area" button to explore nearby locations
+9. Try the "Near Area" button to explore nearby locations
 10. Click the "ABOUT" button to learn more about the project
 
 ## Browser Support
@@ -181,7 +177,7 @@ For other hosting platforms:
 4. **360° View Not Available**
    - Some locations have limited or no street-level imagery (like the Great Wall of China)
    - The app now automatically finds nearby cities with available imagery
-   - Try nearby areas using the "Next Near Area" button
+   - Try nearby areas using the "Near Area" button
    - **Check that your Mapillary API token is valid and properly configured**
 
 ### Network Issues

@@ -47,7 +47,7 @@ This guide helps you resolve common issues you might encounter while using SAY T
 ### Problem: "360° view not available for [location]"
 **Cause**: No street-level imagery available for that specific location
 **Solution**:
-1. Try the "Next Near Area" button to find nearby locations with imagery
+1. Try the "Near Area" button to find nearby locations with imagery
 2. Search for well-known tourist areas or city centers
 3. Try a different, major city nearby
 4. The app now automatically searches for nearby cities with available imagery when direct coverage is unavailable

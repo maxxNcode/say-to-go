@@ -106,7 +106,7 @@ Once a location loads, you can navigate the 360° view using:
 ### Interface Elements
 
 1. **Back to Search**: Returns you to the main screen to search for another location
-2. **Next Near Area**: Finds and loads a nearby location with available 360° imagery
+2. **Near Area**: Finds and loads a nearby location with available 360° imagery
 3. **About**: Learn more about the project, creator (Mark Froilan Lendio, BSIT student at University of Cebu), and how it works by clicking the "About" link at the top right
 4. **Status Messages**: Provides feedback on the current operation
 
@@ -156,7 +156,7 @@ If your location isn't found:
 If the 360° view doesn't load:
 
 1. Some locations have limited or no street-level imagery
-2. Try the "Next Near Area" button to find nearby locations with imagery
+2. Try the "Near Area" button to find nearby locations with imagery
 3. Try a different, well-known location
 4. Check your internet connection
 

@@ -93,7 +93,7 @@ The interface adapts to different screen sizes:
 ### 1. Back to Search
 Return to the main screen from any 360° view to search for a new location.
 
-### 2. Next Near Area
+### 2. Near Area
 Find and explore nearby locations with available 360° imagery without having to perform a new search.
 
 ### 3. 360° Viewer Controls
