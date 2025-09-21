@@ -461,8 +461,10 @@
   
   #back-button, #next-near-area-button {
     padding: 8px 12px !important;
-    font-size: 14px !important;
+    font-size: 11px !important;
+    margin-top: 3em;
   }
+
 }
 
 @media screen and (max-width: 480px) {
@@ -470,6 +472,9 @@
     top: 5px !important;
     left: 5px !important;
     gap: 3px !important;
+
+    margin-top: 3em;
+    
   }
   
   #back-button, #next-near-area-button {
