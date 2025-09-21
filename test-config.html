@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAY TO GO - Config Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success {
+            color: #28a745;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            color: #856404;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SAY TO GO - Configuration Test</h1>
+        
+        <h2>Mapillary API Configuration Check</h2>
+        <div id="config-status">
+            <p>Checking configuration...</p>
+        </div>
+        
+        <h2>Instructions</h2>
+        <ol>
+            <li>Make sure you have created a <code>config.js</code> file with your Mapillary API token</li>
+            <li>If you haven't created it yet, copy <code>config.example.js</code> to <code>config.js</code></li>
+            <li>Replace <code>YOUR_MAPILLARY_ACCESS_TOKEN_HERE</code> with your actual token</li>
+        </ol>
+        
+        <h2>Need a Mapillary Token?</h2>
+        <p>Get one free at: <a href="https://www.mapillary.com/dashboard/developers" target="_blank">Mapillary Developer Dashboard</a></p>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const configStatus = document.getElementById('config-status');
+            
+            // Check if config.js is loaded
+            if (typeof window.MAPILLARY_CONFIG === 'undefined') {
+                configStatus.innerHTML = `
+                    <div class="error">
+                        <h3>Configuration Error</h3>
+                        <p><strong>config.js</strong> file not found or not loaded properly.</p>
+                        <p>Please create a <code>config.js</code> file with your Mapillary API token.</p>
+                        <p>You can copy <code>config.example.js</code> to <code>config.js</code> and edit it.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check if access token is set
+            const token = window.MAPILLARY_CONFIG.ACCESS_TOKEN;
+            
+            if (!token || token === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
+                configStatus.innerHTML = `
+                    <div class="warning">
+                        <h3>Configuration Incomplete</h3>
+                        <p>Mapillary API token not configured properly.</p>
+                        <p>Please edit <code>config.js</code> and replace <code>YOUR_MAPILLARY_ACCESS_TOKEN_HERE</code> with your actual token.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check if token looks valid (basic check)
+            if (token.startsWith('MLY|') && token.length > 20) {
+                configStatus.innerHTML = `
+                    <div class="success">
+                        <h3>Configuration Success</h3>
+                        <p>Mapillary API token is configured correctly.</p>
+                        <p>Token preview: <code>${token.substring(0, 15)}...</code></p>
+                        <p>You're ready to use SAY TO GO!</p>
+                    </div>
+                `;
+            } else {
+                configStatus.innerHTML = `
+                    <div class="warning">
+                        <h3>Configuration Warning</h3>
+                        <p>Mapillary API token is set but doesn't look like a valid token format.</p>
+                        <p>Expected format: <code>MLY|XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</code></p>
+                        <p>Current token: <code>${token.substring(0, 20)}${token.length > 20 ? '...' : ''}</code></p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

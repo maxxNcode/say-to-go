@@ -1,0 +1,31 @@
+{
+  "name": "say-to-go",
+  "version": "1.0.0",
+  "description": "Experience different places virtually by just saying the place using voice recognition",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "voice-recognition",
+    "teleportation",
+    "mapillary",
+    "openstreetmap",
+    "360-view",
+    "virtual-travel"
+  ],
+  "author": "Mark Froilan Lendio (maxxNcode)",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxxNcode/SAYTOGO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxxNcode/SAYTOGO/issues"
+  },
+  "homepage": "https://github.com/maxxNcode/SAYTOGO#readme"
+}

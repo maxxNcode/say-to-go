@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Experience different places virtually by just saying the place using voice recognition. Teleport to any location with 360° street-level imagery.">
+    <meta name="keywords" content="voice recognition, virtual travel, teleportation, 360 view, mapillary, openstreetmap, travel app">
+    <meta name="author" content="Mark Froilan Lendio">
+    <title>SAY TO GO - Voice-Powered Teleportation</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Mapillary SDK -->
+    <script src="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.js"></script>
+    <link href="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.css" rel="stylesheet"/>
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <h1>SAY TO GO</h1>
+            <p class="tagline">Voice-powered teleportation to any location</p>
+        </header>
+        
+        <!-- Audio element for sound effects -->
+        <audio id="experience-audio" preload="auto">
+            <source src="" type="audio/mp3">
+        </audio>
+        
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Listening...</p>
+        </div>
+        
+        <main class="main-content">
+            <div class="btn-container">
+                <div class="btn-drawer transition-top">Voice recognition...</div>
+                <div class="btn-drawer transition-bottom">...click to activate</div>
+
+                <button class="btn" id="mic-button">
+                    <span class="btn-text">SPEAK LOCATION</span>
+                </button>
+
+                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                    <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
+                </svg>
+                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                    <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
+                </svg>
+                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                    <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
+                </svg>
+                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                    <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
+                </svg>
+            </div>
+            
+            <p id="status" class="status-text">Click the button and say a location</p>
+            <p id="recognized-text" class="recognized-text"></p>
+            <p class="hint-text">Note: SAY TO GO works best with specific cities and landmarks.</p>
+        </main>
+        
+        <div id="mapillary-container" class="hidden">
+            <div id="mapillary"></div>
+        </div>
+        
+        <div id="mapillary-loading" class="mapillary-loading hidden">
+            <div class="spinner"></div>
+            <p>Loading experience...</p>
+        </div>
+        
+        <div id="error-message" class="error hidden"></div>
+        
+        <footer class="app-footer">
+            <!-- <p>Powered by OpenStreetMap & Mapillary</p> -->
+        </footer>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
