@@ -83,10 +83,17 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
    - Click "New Project"
    - Import the say-to-go repository from GitHub
 
-2. **Configure Project**
+2. **Configure Environment Variables (CRITICAL!)**
+   - In the "Configure Project" section, open "Environment Variables"
+   - Add a new variable:
+     - Name: `MAPILLARY_TOKEN`
+     - Value: *(your mapillary access token from the Mapillary Dashboard)*
+   - Without this, the Vercel build will succeed but the 360 viewer will fail to load!
+
+3. **Deploy**
    - Framework Preset: Other
    - Root Directory: / (root)
-   - Click "Deploy"
+   - Click "Deploy". Vercel will automatically run the `npm run build` script and generate `config.js` securely.
 
 3. **Access Your Site**
    - Vercel will automatically deploy your site

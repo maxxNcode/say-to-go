@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-memory Geocoding caching to eliminate redundant API calls
 - JSON-LD structured data for improved SEO
 - Globe-style SVG favicon
+- Native Vercel deployment support via safe `vercel-build.js` environment injection
 
 ### Changed
 - Complete UI/UX redesign featuring a modern dark theme and glassmorphism UI
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mapillary SDK is now lazy-loaded to significantly improve initial page load speed
 - Upgraded Nominatim geocoding logic to aggressively prioritize actual cities/places over streets
 - Extracted and centralized the Mapillary token helper to eliminate code duplication
+- Improved mobile responsive design with 16px inputs, `100dvh` viewer sizing, spacing tweaks, and zoom-prevention viewport tags
 - Merged duplicate Mapillary 360° viewer `load` event listeners
 - Moved inline JavaScript styling to proper CSS classes
 - Redesigned the `about.html` page to match the new visual aesthetic
