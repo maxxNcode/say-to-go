@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced basic system fonts with Google Fonts (`Inter`)
 - Animated gradient mesh and floating particle background
 - Mapillary SDK is now lazy-loaded to significantly improve initial page load speed
+- Upgraded Nominatim geocoding logic to aggressively prioritize actual cities/places over streets
 - Extracted and centralized the Mapillary token helper to eliminate code duplication
 - Merged duplicate Mapillary 360° viewer `load` event listeners
 - Moved inline JavaScript styling to proper CSS classes
