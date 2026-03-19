@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Global error boundary to gracefully handle API or internet failures
 - In-memory Geocoding caching to eliminate redundant API calls
 - JSON-LD structured data for improved SEO
-- Skip navigation link for screen reader and keyboard accessibility
 - Globe-style SVG favicon
 
 ### Changed
