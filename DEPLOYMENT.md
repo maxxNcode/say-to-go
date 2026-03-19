@@ -92,8 +92,9 @@ This guide explains how to deploy SAY TO GO to various hosting platforms.
 
 3. **Deploy**
    - Framework Preset: Other
-   - Root Directory: / (root)
-   - Click "Deploy". Vercel will automatically run the `npm run build` script and generate `config.js` securely.
+   - Build Command: `node vercel-build.js` (handled automatically by `vercel.json`)
+   - Output Directory: `.` (handled automatically by `vercel.json`)
+   - Click "Deploy". Vercel will automatically run the build script which injects your token directly into the application code securely. No separate `config.js` file is required in the cloud.
 
 3. **Access Your Site**
    - Vercel will automatically deploy your site
