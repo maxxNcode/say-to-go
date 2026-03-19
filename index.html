@@ -24,11 +24,25 @@
     <link rel="preconnect" href="https://graph.mapillary.com">
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <!-- Mapillary SDK -->
-    <script src="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.js"></script>
-    <link href="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.css" rel="stylesheet"/>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SAY TO GO",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "Web",
+      "description": "Speak any location and teleport there with immersive 360° street-level imagery.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0"
+      }
+    }
+    </script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div id="app">
         <!-- Floating Particles -->
         <div class="particles" aria-hidden="true">
@@ -57,7 +71,7 @@
         </div>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main id="main-content" class="main-content">
             <!-- Mic Button -->
             <div class="btn-container">
                 <div class="btn-drawer transition-top">Voice recognition...</div>

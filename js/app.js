@@ -14,9 +14,19 @@ const searchSubmit = document.getElementById('search-submit');
 const aboutButton  = document.getElementById('about-btn');
 const mapillaryContainer = document.getElementById('mapillary-container');
 
+// --- Utils ---
+
+function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
 // --- Text search handler ---
 
-function handleTextSearch(query) {
+const debouncedSearch = debounce((query) => {
     const trimmed = query.trim();
     if (!trimmed) return;
     setRecognized(trimmed);
@@ -24,6 +34,10 @@ function handleTextSearch(query) {
     saveSearch(trimmed);
     renderRecentSearches(handleTextSearch);
     processLocation(trimmed);
+}, 300);
+
+function handleTextSearch(query) {
+    debouncedSearch(query);
 }
 
 // --- Event wiring ---
@@ -78,6 +92,18 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         startListening();
     }
+});
+
+// --- Global Error Boundary ---
+
+window.addEventListener('error', (event) => {
+    console.error('Global Error Caught:', event.error);
+    showError(`An unexpected error occurred: ${event.message}`);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled Promise Rejection:', event.reason);
+    showError(`An async operation failed. Please check your connection.`);
 });
 
 // --- Init ---

@@ -74,8 +74,24 @@ export function processLocation(location) {
 
 // --- Nominatim geocoding ---
 
+const geocodeCache = new Map();
+
 async function geocodeLocation(location) {
     console.log('Geocoding:', location);
+
+    if (geocodeCache.has(location)) {
+        const cached = geocodeCache.get(location);
+        if (cached.error) {
+            showError(`Could not find location: ${location}. ${cached.error}`);
+            resetUI();
+        } else {
+            console.log('Using cached geocode result');
+            setStatus(`Loading cached result for "${cached.displayName}"...`);
+            showMapillaryView(cached.lat, cached.lon, cached.displayName);
+        }
+        return;
+    }
+
     try {
         const response = await fetch(
             `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=5`,
@@ -93,20 +109,22 @@ async function geocodeLocation(location) {
                 const displayName = result.display_name || location;
                 setStatus(`Checking availability for "${displayName}"...`);
                 if (await checkMapillaryCoverage(lat, lon)) {
+                    geocodeCache.set(location, { lat, lon, displayName });
                     showMapillaryView(lat, lon, displayName);
                     return;
                 }
             }
             // Fallback to first result
-            showMapillaryView(
-                parseFloat(data[0].lat),
-                parseFloat(data[0].lon),
-                data[0].display_name || location
-            );
+            const latFirst = parseFloat(data[0].lat);
+            const lonFirst = parseFloat(data[0].lon);
+            const nameFirst = data[0].display_name || location;
+            geocodeCache.set(location, { lat: latFirst, lon: lonFirst, displayName: nameFirst });
+            showMapillaryView(latFirst, lonFirst, nameFirst);
         } else {
             // Broader search
             const general = await searchGeneralLocation(location);
             if (general) {
+                geocodeCache.set(location, { lat: general.lat, lon: general.lon, displayName: general.displayName });
                 showMapillaryView(general.lat, general.lon, general.displayName);
                 return;
             }
@@ -114,6 +132,7 @@ async function geocodeLocation(location) {
         }
     } catch (error) {
         console.error('Geocoding error:', error);
+        geocodeCache.set(location, { error: error.message });
         showError(`Could not find location: ${location}. ${error.message}`);
         resetUI();
     }

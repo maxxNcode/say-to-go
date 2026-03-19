@@ -13,6 +13,39 @@ import {
 
 // --- Coverage check ---
 
+// --- SDK Lazy Loading ---
+
+let sdkLoaded = false;
+let sdkPromise = null;
+
+function loadMapillarySDK() {
+    if (sdkLoaded) return Promise.resolve();
+    if (sdkPromise) return sdkPromise;
+
+    sdkPromise = new Promise((resolve, reject) => {
+        // Inject CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.css';
+        document.head.appendChild(link);
+
+        // Inject JS
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.js';
+        script.onload = () => {
+            sdkLoaded = true;
+            resolve();
+        };
+        script.onerror = () => {
+            sdkPromise = null;
+            reject(new Error('Failed to load Mapillary SDK. Please check your network connection.'));
+        };
+        document.head.appendChild(script);
+    });
+
+    return sdkPromise;
+}
+
 /**
  * Check whether there is Mapillary coverage near (lat, lon).
  * Tries progressively larger bounding boxes.
@@ -52,6 +85,9 @@ export async function showMapillaryView(lat, lon, locationName) {
         setCurrentLocation(lat, lon, locationName);
         showMapillaryLoading(`Loading experience for "${locationName}"...`);
         showViewerScreen();
+
+        // Lazy load the Mapillary SDK if not already loaded
+        await loadMapillarySDK();
 
         // Ensure container is sized
         const container = document.getElementById('mapillary');
