@@ -5,6 +5,34 @@ All notable changes to the SAY TO GO project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-03-20
+
+### Added
+- Text input field as an alternative to voice input
+- Search history functionality using localStorage
+- Popular destination suggestions (Paris, Tokyo, New York, etc.)
+- Keyboard shortcut (`Space`) to activate voice recognition
+- New `js/` directory with an 8-module ES6 architecture
+- Global error boundary to gracefully handle API or internet failures
+- In-memory Geocoding caching to eliminate redundant API calls
+- JSON-LD structured data for improved SEO
+- Skip navigation link for screen reader and keyboard accessibility
+- Globe-style SVG favicon
+
+### Changed
+- Complete UI/UX redesign featuring a modern dark theme and glassmorphism UI
+- Replaced basic system fonts with Google Fonts (`Inter`)
+- Animated gradient mesh and floating particle background
+- Mapillary SDK is now lazy-loaded to significantly improve initial page load speed
+- Extracted and centralized the Mapillary token helper to eliminate code duplication
+- Merged duplicate Mapillary 360° viewer `load` event listeners
+- Moved inline JavaScript styling to proper CSS classes
+- Redesigned the `about.html` page to match the new visual aesthetic
+
+### Removed
+- Monolithic 1000+ line `script.js` file (replaced by modular `js/` files)
+- Unused dead code variables (`automaticNavigationInterval`, etc.)
+
 ## [1.0.3] - 2025-09-22
 
 ### Added
