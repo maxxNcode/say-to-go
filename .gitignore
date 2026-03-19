@@ -116,7 +116,7 @@ public/
 *.swo
 
 # Configuration files
-config.js
+/config.js
 
 # npm
 package-lock.json

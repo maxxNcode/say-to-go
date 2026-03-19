@@ -8,7 +8,7 @@ if (!token) {
   console.warn('⚠️ WARNING: MAPILLARY_TOKEN environment variable is not set!');
 }
 
-const configPath = path.join(__dirname, 'js', 'config.js');
+const configPath = './js/config.js';
 
 try {
   let content = fs.readFileSync(configPath, 'utf8');
