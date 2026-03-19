@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://maxxncode.github.io/say-to-go/sitemap.xml

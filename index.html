@@ -6,7 +6,23 @@
     <meta name="description" content="Experience different places virtually by just saying the place using voice recognition. Teleport to any location with 360° street-level imagery.">
     <meta name="keywords" content="voice recognition, virtual travel, teleportation, 360 view, mapillary, openstreetmap, travel app">
     <meta name="author" content="Mark Froilan Lendio">
-    <title>SAY TO GO - Experience different places virtually</title>
+    <!-- Open Graph -->
+    <meta property="og:title" content="SAY TO GO — Voice-Powered Teleportation">
+    <meta property="og:description" content="Speak any location and teleport there with immersive 360° street-level imagery.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saytogo.netlify.app">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>SAY TO GO — Experience different places virtually</title>
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Preconnect to API domains -->
+    <link rel="preconnect" href="https://nominatim.openstreetmap.org">
+    <link rel="preconnect" href="https://graph.mapillary.com">
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     <!-- Mapillary SDK -->
     <script src="https://unpkg.com/mapillary-js@4.0.0/dist/mapillary.js"></script>
@@ -14,116 +30,119 @@
 </head>
 <body>
     <div id="app">
+        <!-- Floating Particles -->
+        <div class="particles" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+
+        <!-- Header -->
         <header class="app-header">
             <h1>SAY TO GO</h1>
             <p class="tagline">Experience different places virtually</p>
         </header>
-        
-        <!-- About button at the top right -->
-        <button id="about-btn" class="about-btn">About</button>
-        
-        <!-- Audio element for sound effects -->
+
+        <!-- About Button -->
+        <button id="about-btn" class="about-btn" aria-label="About this app">About</button>
+
+        <!-- Audio (sound effects) -->
         <audio id="experience-audio" preload="auto">
             <source src="" type="audio/mp3">
         </audio>
-        
-        <div id="loading" class="hidden">
-            <div class="spinner"></div>
+
+        <!-- Loading overlay -->
+        <div id="loading" class="hidden" role="status" aria-live="polite">
+            <div class="spinner" aria-hidden="true"></div>
             <p>Listening...</p>
         </div>
-        
+
+        <!-- Main Content -->
         <main class="main-content">
+            <!-- Mic Button -->
             <div class="btn-container">
                 <div class="btn-drawer transition-top">Voice recognition...</div>
                 <div class="btn-drawer transition-bottom">...click to activate</div>
 
-                <button class="btn" id="mic-button">
+                <button class="btn" id="mic-button" aria-label="Activate voice recognition to speak a location">
                     <span class="btn-text">SPEAK LOCATION</span>
                 </button>
 
-                <!-- About button -->
-
-                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                <svg class="btn-corner" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
                     <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
                 </svg>
-                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                <svg class="btn-corner" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
                     <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
                 </svg>
-                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                <svg class="btn-corner" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
                     <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
                 </svg>
-                <svg class="btn-corner" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
+                <svg class="btn-corner" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-1 1 32 32">
                     <path d="M32,32C14.355,32,0,17.645,0,0h.985c0,17.102,13.913,31.015,31.015,31.015v.985Z"></path>
                 </svg>
             </div>
-            
-            <p id="status" class="status-text">Click the button and say a location</p>
-            <p id="recognized-text" class="recognized-text"></p>
-            <p class="hint-text">Note: SAY TO GO works best with specific cities and landmarks.</p>
-        </main>
-        
-        <!-- About section -->
-        <section id="about-section" class="about-section hidden">
-            <div class="about-content">
-                <h2>About SAY TO GO</h2>
-                <p>SAY TO GO is a voice-powered teleportation application that allows you to explore locations around the world through 360° street-level imagery.</p>
-                
-                <h3>How It Works</h3>
-                <ol>
-                    <li>Click the "SPEAK LOCATION" button</li>
-                    <li>Allow microphone access when prompted</li>
-                    <li>Say the name of any location (e.g., "Eiffel Tower, Paris")</li>
-                    <li>The app will find and display 360° street-level imagery of that location</li>
-                </ol>
-                
-                <h3>Features</h3>
-                <ul>
-                    <li>Voice recognition for hands-free navigation</li>
-                    <li>Global coverage with street-level imagery</li>
-                    <li>Automatic fallback to nearby cities when direct imagery is unavailable</li>
-                    <li>Beautiful, animated user interface</li>
-                    <li>Works on desktop and mobile devices</li>
-                </ul>
-                
-                <h3>Technologies Used</h3>
-                <ul>
-                    <li>Web Speech API for voice recognition</li>
-                    <li>OpenStreetMap Nominatim for geocoding</li>
-                    <li>Mapillary API for 360° street-level imagery</li>
-                    <li>HTML5, CSS3, and JavaScript (ES6+)</li>
-                </ul>
-                
-                <h3>About the Creator</h3>
-                <p>Mark Froilan Lendio (maxxNcode) is a passionate developer who loves creating innovative web applications that blend technology with user-friendly experiences. With a keen interest in geospatial technologies and voice interfaces, Mark created SAY TO GO as an educational project to demonstrate the power of modern web APIs.</p>
-                
-                <p>When not coding, Mark enjoys exploring new places, both virtually and in real life, which inspired the creation of this teleportation app.</p>
-                
-                <h3>Project Motivation</h3>
-                <p>SAY TO GO was born out of a desire to make location exploration more accessible and fun. The project showcases how modern web technologies can be combined to create engaging experiences that were previously only possible with dedicated applications.</p>
-                
-                <h3>License</h3>
-                <p>This project is licensed under the MIT License.</p>
-                
-                <button class="btn" id="close-about-button">
-                    <span class="btn-text">CLOSE</span>
+
+            <!-- OR Divider -->
+            <div class="or-divider" aria-hidden="true"><span>or type it</span></div>
+
+            <!-- Text Input -->
+            <div class="search-input-wrapper">
+                <input
+                    type="text"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="Type a location… e.g. Eiffel Tower, Paris"
+                    autocomplete="off"
+                    aria-label="Type a location name to search"
+                >
+                <button id="search-submit" class="search-submit" aria-label="Search location">
+                    ➜
                 </button>
             </div>
-        </section>
-        
+
+            <!-- Status -->
+            <p id="status" class="status-text" aria-live="polite">Click the button and say a location</p>
+            <p id="recognized-text" class="recognized-text" aria-live="polite"></p>
+
+            <!-- Popular Destinations -->
+            <div class="popular-section">
+                <h3>Popular Destinations</h3>
+                <div class="popular-tags" role="list">
+                    <button class="popular-tag" role="listitem" data-location="Eiffel Tower, Paris">🗼 Paris</button>
+                    <button class="popular-tag" role="listitem" data-location="Times Square, New York">🗽 New York</button>
+                    <button class="popular-tag" role="listitem" data-location="Shibuya Crossing, Tokyo">🏯 Tokyo</button>
+                    <button class="popular-tag" role="listitem" data-location="Big Ben, London">🎡 London</button>
+                    <button class="popular-tag" role="listitem" data-location="Sydney Opera House, Sydney">🌊 Sydney</button>
+                    <button class="popular-tag" role="listitem" data-location="Colosseum, Rome">🏛️ Rome</button>
+                    <button class="popular-tag" role="listitem" data-location="Dubai Marina, Dubai">🏙️ Dubai</button>
+                    <button class="popular-tag" role="listitem" data-location="Sagrada Familia, Barcelona">⛪ Barcelona</button>
+                </div>
+            </div>
+
+            <!-- Recent Searches (populated via JS) -->
+            <div id="recent-section" class="recent-section hidden">
+                <h3>Recent Searches</h3>
+                <div id="recent-tags" class="recent-tags" role="list"></div>
+            </div>
+
+            <p class="hint-text">SAY TO GO works best with specific cities and landmarks.</p>
+        </main>
+
+        <!-- Mapillary 360° Container -->
         <div id="mapillary-container" class="hidden">
             <div id="mapillary"></div>
         </div>
-        
-        <div id="mapillary-loading" class="mapillary-loading hidden">
-            <div class="spinner"></div>
+
+        <!-- Mapillary Loading Overlay -->
+        <div id="mapillary-loading" class="mapillary-loading hidden" role="status">
+            <div class="spinner" aria-hidden="true"></div>
             <p>Loading experience...</p>
         </div>
-        
-        <div id="error-message" class="error hidden"></div>
 
+        <!-- Error Message -->
+        <div id="error-message" class="error hidden" role="alert"></div>
     </div>
-    
+
     <script src="config.js"></script>
-    <script src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
