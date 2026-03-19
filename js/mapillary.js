@@ -2,7 +2,7 @@
 // Mapillary — Viewer, coverage checks, nearby search
 // ============================================================
 
-import { getAccessToken, NOMINATIM_HEADERS } from './config.js';
+import { getAccessToken, NOMINATIM_HEADERS } from './env.js';
 import { setViewer, getViewer, destroyViewer, setCurrentLocation } from './state.js';
 import {
     setStatus, showError, resetUI,

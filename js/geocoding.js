@@ -2,7 +2,7 @@
 // Geocoding — Location processing + Nominatim API
 // ============================================================
 
-import { NOMINATIM_HEADERS } from './config.js';
+import { NOMINATIM_HEADERS } from './env.js';
 import { checkMapillaryCoverage, showMapillaryView } from './mapillary.js';
 import { setStatus, showError, resetUI } from './ui.js';
 
