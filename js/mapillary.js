@@ -54,7 +54,7 @@ function loadMapillarySDK() {
 export async function checkMapillaryCoverage(lat, lon) {
     try {
         const token = getAccessToken();
-        for (const size of [0.001, 0.005, 0.01, 0.02]) {
+        for (const size of [0.001, 0.005, 0.01, 0.02, 0.05, 0.1]) {
             try {
                 const res = await fetch(
                     `https://graph.mapillary.com/images?access_token=${token}&fields=id` +

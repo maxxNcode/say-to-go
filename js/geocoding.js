@@ -94,7 +94,7 @@ async function geocodeLocation(location) {
 
     try {
         const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=5`,
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=10`,
             { headers: NOMINATIM_HEADERS }
         );
         if (!response.ok) throw new Error(`Geocoding failed (status ${response.status}).`);
@@ -102,24 +102,50 @@ async function geocodeLocation(location) {
         const data = await response.json();
 
         if (data.length > 0) {
-            // Try each result for one with Mapillary coverage
-            for (const result of data) {
-                const lat = parseFloat(result.lat);
-                const lon = parseFloat(result.lon);
-                const displayName = result.display_name || location;
-                setStatus(`Checking availability for "${displayName}"...`);
-                if (await checkMapillaryCoverage(lat, lon)) {
-                    geocodeCache.set(location, { lat, lon, displayName });
-                    showMapillaryView(lat, lon, displayName);
+            // Sort data: prioritize true places over highways
+            data.sort((a, b) => {
+                const isAhw = a.class === 'highway';
+                const isBhw = b.class === 'highway';
+                if (isAhw && !isBhw) return 1;
+                if (!isAhw && isBhw) return -1;
+                return (b.importance || 0) - (a.importance || 0);
+            });
+
+            const bestMatch = data[0];
+            const bestLat = parseFloat(bestMatch.lat);
+            const bestLon = parseFloat(bestMatch.lon);
+            const bestName = bestMatch.display_name || location;
+
+            setStatus(`Checking availability for "${bestName}"...`);
+            
+            // Check if the absolute best match has coverage
+            if (await checkMapillaryCoverage(bestLat, bestLon)) {
+                geocodeCache.set(location, { lat: bestLat, lon: bestLon, displayName: bestName });
+                showMapillaryView(bestLat, bestLon, bestName);
+                return;
+            }
+
+            // Try the next few good results if they are very close
+            for (let i = 1; i < Math.min(data.length, 5); i++) {
+                const result = data[i];
+                if (result.class === 'highway') continue;
+                
+                const rLat = parseFloat(result.lat);
+                const rLon = parseFloat(result.lon);
+                const rName = result.display_name || location;
+                const dist = Math.sqrt(Math.pow(rLat - bestLat, 2) + Math.pow(rLon - bestLon, 2));
+                
+                if (dist < 0.5 && await checkMapillaryCoverage(rLat, rLon)) {
+                    geocodeCache.set(location, { lat: rLat, lon: rLon, displayName: rName });
+                    showMapillaryView(rLat, rLon, rName);
                     return;
                 }
             }
-            // Fallback to first result
-            const latFirst = parseFloat(data[0].lat);
-            const lonFirst = parseFloat(data[0].lon);
-            const nameFirst = data[0].display_name || location;
-            geocodeCache.set(location, { lat: latFirst, lon: lonFirst, displayName: nameFirst });
-            showMapillaryView(latFirst, lonFirst, nameFirst);
+
+            // If no exact coverage is found in the points, pass the BEST match to the viewer.
+            // The viewer will expand its search radius automatically.
+            geocodeCache.set(location, { lat: bestLat, lon: bestLon, displayName: bestName });
+            showMapillaryView(bestLat, bestLon, bestName);
         } else {
             // Broader search
             const general = await searchGeneralLocation(location);
