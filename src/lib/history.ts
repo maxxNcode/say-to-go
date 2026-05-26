@@ -16,3 +16,26 @@ export function getHistory(): string[] {
     return []
   }
 }
+
+export function renderRecentSearches(onSelect: (term: string) => void): void {
+  const history = getHistory()
+  const recentTags = document.getElementById('recent-tags')
+  const recentSection = document.getElementById('recent-section')
+  if (!recentTags || !recentSection) return
+
+  recentTags.innerHTML = ''
+
+  if (history.length === 0) {
+    recentSection.classList.add('hidden')
+    return
+  }
+
+  recentSection.classList.remove('hidden')
+  history.forEach((term) => {
+    const tag = document.createElement('button')
+    tag.className = 'tag'
+    tag.textContent = term
+    tag.addEventListener('click', () => onSelect(term))
+    recentTags.appendChild(tag)
+  })
+}
