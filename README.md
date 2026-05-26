@@ -52,19 +52,15 @@ Before using SAY TO GO, you'll need:
 
 ### 2. Configure the Application
 
-1. Copy `config.example.js` to `config.js`:
-   ```bash
-   cp config.example.js config.js
-   ```
-   
-2. Edit `config.js` and replace `YOUR_MAPILLARY_ACCESS_TOKEN_HERE` with your actual token:
-   ```javascript
-   const MAPILLARY_CONFIG = {
-     ACCESS_TOKEN: 'your_actual_mapillary_access_token_here'
-   };
-   ```
+Copy `.env.example` to `.env` and set your Mapillary token:
+```bash
+cp .env.example .env
+```
 
-**Note**: The `config.js` file is included in `.gitignore` to prevent accidental exposure of your API token.
+Then edit `.env`:
+```
+VITE_MAPILLARY_TOKEN=your_actual_mapillary_access_token_here
+```
 
 ## How It Works
 
@@ -78,19 +74,19 @@ Before using SAY TO GO, you'll need:
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/maxxNcode/SAYTOGO.git
-   ```
+```bash
+git clone https://github.com/maxxNcode/say-to-go.git
+cd say-to-go
+npm install
+cp .env.example .env   # Add your Mapillary token
+npm run dev            # Start dev server
+```
 
-2. Navigate to the project directory:
-   ```bash
-   cd SAYTOGO
-   ```
-
-3. Set up your Mapillary API token (see Setup Instructions above)
-
-4. Open `index.html` in a modern web browser (Chrome or Edge recommended)
+For production:
+```bash
+npm run build          # Output in dist/
+npm run preview        # Preview production build
+```
 
 **Note**: For full functionality, the app requires:
 - HTTPS connection (except when running on localhost)
@@ -99,37 +95,24 @@ Before using SAY TO GO, you'll need:
 
 ## Deployment
 
-### Deploying to Netlify
+### Vercel (Recommended)
 
-1. **DO NOT commit your `config.js` file** to version control
-2. Deploy your site to Netlify using your preferred method (GitHub integration, drag-and-drop, etc.)
-3. After deployment, configure your Mapillary API token using one of these methods:
+The project includes a `vercel.json` configured for Vite builds:
 
-#### Method 1: Manual File Upload (Recommended for Plain JavaScript Apps)
-1. Create a `config.js` file locally with your token:
-   ```javascript
-   const MAPILLARY_CONFIG = {
-     ACCESS_TOKEN: 'your_actual_mapillary_access_token_here'
-   };
-   window.MAPILLARY_CONFIG = MAPILLARY_CONFIG;
-   ```
-2. Replace `your_actual_mapillary_access_token_here` with your actual Mapillary API token
-3. Upload this file directly to your Netlify site through the file management interface
+1. Push to GitHub
+2. Import to Vercel
+3. Add `VITE_MAPILLARY_TOKEN` to Vercel environment variables
+4. Deploy
 
-#### Method 2: Environment Variables (For React Apps Only)
-**Note**: This method only works for React applications, not plain JavaScript apps like this one.
-1. In Netlify, go to your site settings
-2. Navigate to "Build & deploy" → "Environment"
-3. Add an environment variable:
-   - Key: `REACT_APP_MAPILLARY_ACCESS_TOKEN`
-   - Value: Your actual Mapillary API token
+### Other Platforms
 
-### Deploying to Other Platforms
+Any static host works:
+```bash
+npm run build      # Produces dist/
+# Deploy dist/ to Netlify, GitHub Pages, Firebase, etc.
+```
 
-For other hosting platforms:
-- **GitHub Pages**: Upload config.js file directly or use build process with environment variables
-- **Vercel**: Upload config.js file directly or use environment variables
-- **Firebase**: Upload config.js file directly or use runtime configuration
+Set the `VITE_MAPILLARY_TOKEN` environment variable on your hosting platform.
 
 **Security Reminder**: Never commit API tokens to public repositories!
 
@@ -190,33 +173,58 @@ If you're experiencing network-related problems:
 
 ## Development
 
-### Project Structure
+### Prerequisites
+- Node.js 18+
+- npm
+
+### Setup
+
+```bash
+git clone https://github.com/maxxNcode/say-to-go.git
+cd say-to-go
+npm install
+cp .env.example .env  # Then add your Mapillary token
 ```
-SAYTOGO/
-├── index.html          # Main HTML structure
-├── styles.css          # Custom styling
-├── button-inspiration.css  # Animated button UI
-├── script.js           # Main application logic
-├── config.example.js   # Example configuration file
-├── config.js           # Your configuration (gitignored)
-└── README.md           # This file
+
+### Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with HMR |
+| `npm run build` | TypeScript check + production build to `dist/` |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run lint` | Lint with ESLint |
+| `npm run format` | Format with Prettier |
+
+### Project Structure
+
+```
+src/
+├── main.ts               # Entry point
+├── types.ts              # Shared TypeScript interfaces
+├── style.css             # Design system & styles
+├── data/
+│   └── suggestions.ts    # Location suggestion map
+└── lib/
+    ├── env.ts            # API token management
+    ├── state.ts          # Centralized app state
+    ├── speech.ts         # Web Speech API recognition
+    ├── history.ts        # Search history (localStorage)
+    ├── geocoding.ts      # Nominatim geocoding
+    ├── mapillary/
+    │   ├── api.ts        # Mapillary API fetching
+    │   └── viewer.ts     # Mapillary viewer lifecycle
+    └── ui/
+        ├── dom.ts        # DOM refs cache
+        └── controller.ts # View transitions, buttons, errors
 ```
 
 ### Key Components
 
-1. **Voice Recognition**: Implemented with Web Speech API in [script.js](script.js)
-2. **Geocoding**: Uses OpenStreetMap Nominatim API for location lookup
-3. **360° Viewer**: Powered by Mapillary JS SDK
-4. **UI Elements**: Custom CSS animations and transitions in [button-inspiration.css](button-inspiration.css)
-
-### Customization
-
-To customize the application:
-
-1. **Styling**: Modify [button-inspiration.css](button-inspiration.css) for UI changes
-2. **Functionality**: Edit [script.js](script.js) for core logic modifications
-3. **Content**: Update [index.html](index.html) for structural changes
-4. **Configuration**: Update [config.js](config.js) for API tokens
+1. **Voice Recognition**: `src/lib/speech.ts` — Web Speech API with retry logic
+2. **Geocoding**: `src/lib/geocoding.ts` — OpenStreetMap Nominatim API
+3. **360° Viewer**: `src/lib/mapillary/` — Mapillary JS SDK integration
+4. **State**: `src/lib/state.ts` — Centralized application state
 
 ## Contributing
 
