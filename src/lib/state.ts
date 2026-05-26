@@ -1,5 +1,3 @@
-import type { Location } from '../types'
-
 interface InternalState {
   viewer: unknown | null
   currentLocation: { lat: number | null; lon: number | null; name: string | null }
@@ -26,7 +24,7 @@ export function getViewer(): unknown | null {
 
 export function destroyViewer() {
   if (state.viewer && typeof (state.viewer as Record<string, () => void>).remove === 'function') {
-    ;(state.viewer as Record<string, () => void>).remove()
+    (state.viewer as Record<string, () => void>).remove()
   }
   state.viewer = null
 }

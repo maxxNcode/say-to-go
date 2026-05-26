@@ -1,6 +1,5 @@
 import { $ } from './dom'
 import { destroyViewer, getCurrentLocation } from '../state'
-import type { GeocodeResult } from '../geocoding'
 
 export function setStatus(msg: string): void {
   if ($.status) $.status.textContent = msg
@@ -69,8 +68,14 @@ export function hideMapillaryLoading(): void {
   if (el) el.classList.add('hidden')
 }
 
+export interface NearbyResult {
+  lat: number
+  lon: number
+  displayName?: string
+}
+
 export interface ViewerButtonsOptions {
-  onNearby: (loc: { lat: number; lon: number; name: string | null }) => Promise<GeocodeResult | null>
+  onNearby: (loc: { lat: number; lon: number; name: string | null }) => Promise<NearbyResult | null>
   showMapillaryView: (lat: number, lon: number, name: string) => Promise<void>
 }
 
@@ -111,7 +116,7 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
       const nearbyArea = await opts.onNearby(loc as { lat: number; lon: number; name: string | null })
       if (nearbyArea) {
         destroyViewer()
-        await opts.showMapillaryView(nearbyArea.lat, nearbyArea.lon, nearbyArea.displayName)
+        await opts.showMapillaryView(nearbyArea.lat, nearbyArea.lon, nearbyArea.displayName ?? 'Nearby area')
       } else {
         hideMapillaryLoading()
         showError('No nearby areas with 360° views found.')

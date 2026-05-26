@@ -6,7 +6,7 @@ interface MapillaryViewer {
   remove: () => void
   getComponent: (name: string) => { activate: () => void; isActive: () => boolean } | null
 }
-import { showViewerScreen, showMainScreen, showMapillaryLoading, hideMapillaryLoading, addViewerButtons, showError, setStatus, resetUI, setRecognized } from '../ui/controller'
+import { showViewerScreen, showMainScreen, showMapillaryLoading, hideMapillaryLoading, addViewerButtons, showError, setStatus, resetUI } from '../ui/controller'
 import { findImage, findNearestCityWithImagery, findNearbyAreaWith360View } from './api'
 
 let sdkLoaded = false
@@ -32,7 +32,7 @@ function loadMapillarySDK(): Promise<void> {
   return sdkPromise
 }
 
-function initViewer(imageId: string, accessToken: string, locationName: string): void {
+function initViewer(imageId: string, accessToken: string, _locationName: string): void {
   try {
     destroyViewer()
 
@@ -79,7 +79,7 @@ function initViewer(imageId: string, accessToken: string, locationName: string):
 }
 
 function activateComponents(viewer: { getComponent: (name: string) => { activate: () => void } | null }): void {
-  ;['sequence', 'direction', 'zoom'].forEach((name) => {
+  ['sequence', 'direction', 'zoom'].forEach((name) => {
     try { viewer.getComponent(name)?.activate() } catch { /* ignore */ }
   })
 }
@@ -90,7 +90,7 @@ function setupViewerControls(viewer: { getComponent: (name: string) => { isActiv
 
   const events = ['mousedown', 'mousemove', 'wheel', 'touchstart', 'touchmove', 'keydown']
   const onInteraction = () => {
-    ;['sequence', 'direction', 'zoom'].forEach((name) => {
+    ['sequence', 'direction', 'zoom'].forEach((name) => {
       try {
         const c = viewer.getComponent(name)
         if (c && !c.isActive()) c.activate()

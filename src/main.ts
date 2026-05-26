@@ -2,7 +2,7 @@ import './style.css'
 import { initSpeech, isSupported, startListening, onSpeechError, onSpeechStart, onSpeechEnd } from './lib/speech'
 import { processLocation } from './lib/geocoding'
 import { saveSearch, renderRecentSearches } from './lib/history'
-import { setStatus, setRecognized, showError, resetUI, hideListening } from './lib/ui/controller'
+import { setStatus, setRecognized, showError, hideListening } from './lib/ui/controller'
 import { showMapillaryView } from './lib/mapillary/viewer'
 
 const searchInput = document.getElementById('search-input') as HTMLInputElement | null
@@ -63,11 +63,11 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
   }
 })
 
-window.addEventListener('error', (event: ErrorEvent) => {
-  showError(`An unexpected error occurred: ${event.message}`)
+window.addEventListener('error', (_event: ErrorEvent) => {
+  showError(`An unexpected error occurred`)
 })
 
-window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
+window.addEventListener('unhandledrejection', (_event: PromiseRejectionEvent) => {
   showError(`An async operation failed. Please check your connection.`)
 })
 
