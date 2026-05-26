@@ -121,13 +121,3 @@ public/
 # npm
 package-lock.json
 
-# Vite
-dist/
-
-# Environment
-.env
-.env.local
-
-# Editor
-.vscode/
-.idea/
