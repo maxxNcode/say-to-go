@@ -1,21 +1,58 @@
 import { getAccessToken } from '../env'
 
 const MAPILLARY_BASE = 'https://graph.mapillary.com'
+const TIMEOUT_MS = 15000
+const MAX_RETRIES = 2
+
+async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = TIMEOUT_MS): Promise<Response> {
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal })
+    return res
+  } finally {
+    clearTimeout(id)
+  }
+}
+
+async function fetchMapillary(url: string, retries = MAX_RETRIES): Promise<Response | null> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetchWithTimeout(url)
+      if (res.ok) return res
+
+      if (res.status === 400) {
+        const text = await res.text()
+        if (text.includes('OAuthException') || text.includes('access_token')) {
+          throw new Error('Mapillary API token is invalid or expired.')
+        }
+        return null
+      }
+
+      if (res.status >= 500 && attempt < retries) {
+        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
+        continue
+      }
+
+      return null
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError' && attempt < retries) {
+        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
+        continue
+      }
+      if (err instanceof Error && (err.message.includes('invalid') || err.message.includes('OAuth'))) throw err
+      if (attempt >= retries) return null
+    }
+  }
+  return null
+}
 
 async function findSingleImage(lat: number, lon: number, bboxSize: number, token: string): Promise<string | null> {
   const bbox = `${lon - bboxSize},${lat - bboxSize},${lon + bboxSize},${lat + bboxSize}`
   const url = `${MAPILLARY_BASE}/images?access_token=${token}&fields=id&bbox=${bbox}&limit=1`
 
-  const res = await fetch(url)
-  if (!res.ok) {
-    if (res.status === 400) {
-      const text = await res.text()
-      if (text.includes('OAuthException') || text.includes('access_token')) {
-        throw new Error('Mapillary API token is invalid or expired.')
-      }
-    }
-    return null
-  }
+  const res = await fetchMapillary(url)
+  if (!res) return null
 
   const data = await res.json()
   return data.data?.length > 0 ? data.data[0].id : null
@@ -54,7 +91,7 @@ export async function findNearestCityWithImagery(
 
   for (const radius of [0.1, 0.2, 0.5, 1.0, 2.0]) {
     try {
-      const res = await fetch(
+      const res = await fetchWithTimeout(
         `https://nominatim.openstreetmap.org/search?format=json&q=city&bounded=1` +
         `&viewbox=${lon - radius},${lat - radius},${lon + radius},${lat + radius}&limit=5`,
         { headers: { 'User-Agent': 'SAY TO GO App/2.0' } },
@@ -96,7 +133,7 @@ export async function findNearbyAreaWith360View(
       if (!id) continue
 
       try {
-        const rev = await fetch(
+        const rev = await fetchWithTimeout(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${nLat}&lon=${nLon}`,
           { headers: { 'User-Agent': 'SAY TO GO App/2.0' } },
         )

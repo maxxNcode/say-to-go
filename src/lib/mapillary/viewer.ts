@@ -66,7 +66,14 @@ function initViewer(imageId: string, accessToken: string, _locationName: string)
 
       viewer.on('error', (...args: unknown[]) => {
         const err = args[0] as Error
-        showError(`Failed to load 360° viewer. ${err.message}`)
+        const msg = err?.message ?? ''
+        if (msg.includes('timeout') || msg.includes('timed out')) {
+          showError('Mapillary imagery is taking too long to load. The service may be temporarily slow.')
+        } else if (msg.includes('unavailable') || msg.includes('temporarily')) {
+          showError('Mapillary service is temporarily unavailable. Please try again later.')
+        } else {
+          showError(`Failed to load 360° viewer. ${msg}`)
+        }
         hideMapillaryLoading()
       })
     }, 200)
