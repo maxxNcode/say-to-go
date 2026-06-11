@@ -29,9 +29,12 @@ async function fetchMapillary(url: string, retries = MAX_RETRIES): Promise<Respo
         return null
       }
 
-      if (res.status >= 500 && attempt < retries) {
-        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
-        continue
+      if (res.status >= 500) {
+        if (attempt < retries) {
+          await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
+          continue
+        }
+        throw new Error('Mapillary API is temporarily unavailable. Please try again later.')
       }
 
       return null

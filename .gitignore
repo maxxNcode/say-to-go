@@ -124,3 +124,4 @@ public/
 # npm
 package-lock.json
 
+.vercel

@@ -62,24 +62,30 @@ export function initSpeech(callback: SearchCallback): void {
   }
 
   recognition.onend = () => {
+    isRecognizing = false
     endHandler?.()
   }
 }
+
+let isRecognizing = false
 
 export function startListening(): void {
   if (!recognition) {
     errorHandler?.('Speech recognition is not initialized.')
     return
   }
+  if (isRecognizing) return
   if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
     errorHandler?.('HTTPS is required for voice recognition.')
     return
   }
   retryCount = 0
+  isRecognizing = true
   startHandler?.()
   try {
     recognition.start()
   } catch (e) {
+    isRecognizing = false
     console.error('Failed to start speech recognition:', e)
   }
 }

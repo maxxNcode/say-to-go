@@ -2,7 +2,7 @@ import './style.css'
 import { initSpeech, isSupported, startListening, onSpeechError, onSpeechStart, onSpeechEnd } from './lib/speech'
 import { processLocation } from './lib/geocoding'
 import { saveSearch, renderRecentSearches } from './lib/history'
-import { setStatus, setRecognized, showError, hideListening } from './lib/ui/controller'
+import { setStatus, setRecognized, showError, showListening, hideListening } from './lib/ui/controller'
 import { showMapillaryView } from './lib/mapillary/viewer'
 
 const searchInput = document.getElementById('search-input') as HTMLInputElement | null
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setStatus('Click the button and say a location')
 
   onSpeechStart(() => {
-    setStatus('Listening... Speak now')
+    showListening()
   })
 
   onSpeechEnd(() => {
