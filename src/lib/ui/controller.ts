@@ -77,9 +77,7 @@ export function showPortalAnimation(): Promise<void> {
     const overlay = $.portalOverlay
     if (!overlay) { resolve(); return }
     overlay.classList.remove('hidden')
-    overlay.classList.add('portal-active')
     setTimeout(() => {
-      overlay.classList.remove('portal-active')
       overlay.classList.add('hidden')
       resolve()
     }, 800)
@@ -141,7 +139,6 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   backBtn.setAttribute('aria-label', 'Return to search')
   backBtn.addEventListener('click', () => {
     goBack()
-    wrapper.remove()
   })
 
   const nearBtn = document.createElement('button')

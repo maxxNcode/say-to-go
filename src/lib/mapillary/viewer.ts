@@ -159,7 +159,7 @@ export async function showMapillaryView(lat: number, lon: number, locationName: 
           showInfoPanel(wiki.title, wiki.extract, wiki.content_urls?.desktop.page)
         }, 1500)
       }
-    }).catch(() => { /* ignore */ })
+    })
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error)
     hideMapillaryLoading()
