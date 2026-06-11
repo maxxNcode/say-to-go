@@ -1,7 +1,12 @@
-export default async function handler(_req: Request): Promise<Response> {
+import type { IncomingMessage, ServerResponse } from 'http'
+
+export default async function handler(_req: IncomingMessage, res: ServerResponse) {
   const token = process.env.MAPILLARY_TOKEN ?? process.env.VITE_MAPILLARY_TOKEN
   if (!token) {
-    return Response.json({ error: 'Mapillary token not configured' }, { status: 500 })
+    res.writeHead(500, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Mapillary token not configured' }))
+    return
   }
-  return Response.json({ token })
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ token }))
 }

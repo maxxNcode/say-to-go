@@ -83,6 +83,8 @@ dist/
 # Gatsby files
 .cache/
 public/
+# Vite uses public/ for static assets (not Gatsby build output)
+!public/**
 
 # vuepress build output
 .vuepress/dist
