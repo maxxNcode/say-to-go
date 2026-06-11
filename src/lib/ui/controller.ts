@@ -1,3 +1,4 @@
+import { createIcons } from 'lucide'
 import { $ } from './dom'
 import { destroyViewer, getCurrentLocation } from '../state'
 
@@ -90,7 +91,7 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   const backBtn = document.createElement('button')
   backBtn.id = 'back-button'
   backBtn.className = 'viewer-btn viewer-btn--back'
-  backBtn.textContent = '← Back to Search'
+  backBtn.innerHTML = '<i data-lucide="arrow-left" class="arrow-icon"></i> Back to Search'
   backBtn.setAttribute('aria-label', 'Return to search')
   backBtn.addEventListener('click', () => {
     showMainScreen()
@@ -130,4 +131,5 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   wrapper.appendChild(backBtn)
   wrapper.appendChild(nearBtn)
   document.body.appendChild(wrapper)
+  createIcons()
 }

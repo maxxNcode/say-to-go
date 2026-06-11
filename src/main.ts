@@ -1,4 +1,5 @@
 import './style.css'
+import { createIcons } from 'lucide'
 import { initSpeech, isSupported, startListening, onSpeechError, onSpeechStart, onSpeechEnd } from './lib/speech'
 import { processLocation } from './lib/geocoding'
 import { saveSearch, renderRecentSearches } from './lib/history'
@@ -72,6 +73,7 @@ window.addEventListener('unhandledrejection', (_event: PromiseRejectionEvent) =>
 })
 
 document.addEventListener('DOMContentLoaded', () => {
+  createIcons()
   setStatus('Click the button and say a location')
 
   onSpeechStart(() => {
