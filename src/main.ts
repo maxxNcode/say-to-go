@@ -1,10 +1,12 @@
 import './style.css'
-import { createIcons, ArrowRight, MapPin, ArrowLeft } from 'lucide'
+import { createIcons, ArrowRight, MapPin, ArrowLeft, Landmark, Building, Compass, Castle, Ship, Church, Sparkles } from 'lucide'
 import { initSpeech, isSupported, startListening, onSpeechError, onSpeechStart, onSpeechEnd } from './lib/speech'
 import { processLocation } from './lib/geocoding'
 import { saveSearch, renderRecentSearches } from './lib/history'
-import { setStatus, setRecognized, showError, showListening, hideListening } from './lib/ui/controller'
+import { setStatus, setRecognized, showError, showListening, hideListening, goBack, initUIControls } from './lib/ui/controller'
 import { showMapillaryView } from './lib/mapillary/viewer'
+import { $ } from './lib/ui/dom'
+import { POPULAR_LOCATIONS } from './data/suggestions'
 
 const searchInput = document.getElementById('search-input') as HTMLInputElement | null
 const mapillaryContainer = document.getElementById('mapillary-container')
@@ -51,7 +53,20 @@ document.getElementById('about-btn')?.addEventListener('click', () => {
   window.location.href = 'about.html'
 })
 
+// Surprise Me button
+$.surpriseBtn?.addEventListener('click', () => {
+  const random = POPULAR_LOCATIONS[Math.floor(Math.random() * POPULAR_LOCATIONS.length)]
+  if (searchInput) searchInput.value = random
+  handleTextSearch(random)
+})
+
+// Escape key to go back from viewer
 document.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Escape' && !mapillaryContainer?.classList.contains('hidden')) {
+    e.preventDefault()
+    goBack()
+  }
+
   if (
     e.code === 'Space' &&
     document.activeElement !== searchInput &&
@@ -73,7 +88,11 @@ window.addEventListener('unhandledrejection', (_event: PromiseRejectionEvent) =>
 })
 
 document.addEventListener('DOMContentLoaded', () => {
-  createIcons({ icons: { ArrowRight, MapPin, ArrowLeft } })
+  createIcons({
+    icons: {
+      ArrowRight, MapPin, ArrowLeft, Landmark, Building, Compass, Castle, Ship, Church, Sparkles,
+    },
+  })
   setStatus('Click the button and say a location')
 
   onSpeechStart(() => {
@@ -98,5 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showError('Speech recognition is not supported. Please try Chrome or Edge.')
   }
 
+  initUIControls()
   renderRecentSearches(handleTextSearch)
 })

@@ -25,6 +25,7 @@ export function hideListening(): void {
 export function resetUI(): void {
   hideListening()
   setRecognized('')
+  hideInfoPanel()
 }
 
 let errorTimeout: ReturnType<typeof setTimeout> | null = null
@@ -54,6 +55,7 @@ export function showMainScreen(): void {
   $.mapillaryContainer?.classList.add('hidden')
   $.mainContent?.classList.remove('hidden')
   $.appHeader?.classList.remove('hidden')
+  hideInfoPanel()
 }
 
 export function showMapillaryLoading(text: string): void {
@@ -67,6 +69,50 @@ export function showMapillaryLoading(text: string): void {
 export function hideMapillaryLoading(): void {
   const el = $.mapillaryLoading
   if (el) el.classList.add('hidden')
+}
+
+/* ---------- Portal Teleport Animation ---------- */
+export function showPortalAnimation(): Promise<void> {
+  return new Promise((resolve) => {
+    const overlay = $.portalOverlay
+    if (!overlay) { resolve(); return }
+    overlay.classList.remove('hidden')
+    overlay.classList.add('portal-active')
+    setTimeout(() => {
+      overlay.classList.remove('portal-active')
+      overlay.classList.add('hidden')
+      resolve()
+    }, 800)
+  })
+}
+
+/* ---------- Wikipedia Info Panel ---------- */
+export function showInfoPanel(
+  title: string,
+  extract: string,
+  url?: string,
+): void {
+  if ($.infoPanelTitle) $.infoPanelTitle.textContent = `📍 ${title}`
+  if ($.infoPanelBody) $.infoPanelBody.textContent = extract
+  if ($.infoPanelLink && url) {
+    ($.infoPanelLink as HTMLAnchorElement).href = url
+    $.infoPanelLink.classList.remove('hidden')
+  } else if ($.infoPanelLink) {
+    $.infoPanelLink.classList.add('hidden')
+  }
+  const panel = $.infoPanel
+  if (panel) {
+    panel.classList.remove('hidden')
+    panel.classList.remove('info-panel-enter')
+    // Force reflow for re-trigger animation
+    void panel.offsetWidth
+    panel.classList.add('info-panel-enter')
+  }
+}
+
+export function hideInfoPanel(): void {
+  const panel = $.infoPanel
+  if (panel) panel.classList.add('hidden')
 }
 
 export interface NearbyResult {
@@ -94,11 +140,8 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   backBtn.innerHTML = '<i data-lucide="arrow-left" class="arrow-icon"></i> Back to Search'
   backBtn.setAttribute('aria-label', 'Return to search')
   backBtn.addEventListener('click', () => {
-    showMainScreen()
-    setRecognized('')
-    setStatus('Click the button and say a location')
+    goBack()
     wrapper.remove()
-    destroyViewer()
   })
 
   const nearBtn = document.createElement('button')
@@ -132,4 +175,18 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   wrapper.appendChild(nearBtn)
   document.body.appendChild(wrapper)
   createIcons({ icons: { ArrowLeft } })
+}
+
+/** Shared back/exit logic */
+export function goBack(): void {
+  showMainScreen()
+  setRecognized('')
+  setStatus('Click the button and say a location')
+  const existing = document.getElementById('back-button-container')
+  if (existing) existing.remove()
+}
+
+/** Init UI controls that need the DOM to be ready */
+export function initUIControls(): void {
+  document.getElementById('info-panel-close')?.addEventListener('click', hideInfoPanel)
 }

@@ -11,4 +11,10 @@ export const $ = {
   recentTags: document.getElementById('recent-tags'),
   recentSection: document.getElementById('recent-section'),
   searchInput: document.getElementById('search-input') as HTMLInputElement | null,
+  portalOverlay: document.getElementById('portal-overlay'),
+  infoPanel: document.getElementById('info-panel'),
+  infoPanelTitle: document.getElementById('info-panel-title'),
+  infoPanelBody: document.getElementById('info-panel-body'),
+  infoPanelLink: document.getElementById('info-panel-link'),
+  surpriseBtn: document.getElementById('surprise-btn'),
 }

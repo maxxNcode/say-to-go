@@ -6,8 +6,9 @@ interface MapillaryViewer {
   remove: () => void
   getComponent: (name: string) => { activate: () => void; isActive: () => boolean } | null
 }
-import { showViewerScreen, showMainScreen, showMapillaryLoading, hideMapillaryLoading, addViewerButtons, showError, setStatus, resetUI } from '../ui/controller'
+import { showViewerScreen, showMainScreen, showMapillaryLoading, hideMapillaryLoading, addViewerButtons, showError, setStatus, resetUI, showPortalAnimation, showInfoPanel } from '../ui/controller'
 import { findImage, findNearestCityWithImagery, findNearbyAreaWith360View } from './api'
+import { fetchSummary } from '../wikipedia'
 
 let sdkLoaded = false
 let sdkPromise: Promise<void> | null = null
@@ -113,6 +114,10 @@ export async function showMapillaryView(lat: number, lon: number, locationName: 
   try {
     setCurrentLocation(lat, lon, locationName)
     showMapillaryLoading(`Loading experience for "${locationName}"...`)
+
+    // Play portal animation before showing viewer
+    await showPortalAnimation()
+
     showViewerScreen()
 
     await loadMapillarySDK()
@@ -146,6 +151,15 @@ export async function showMapillaryView(lat: number, lon: number, locationName: 
       },
       showMapillaryView,
     })
+
+    // Fetch Wikipedia info in background and show after a brief delay
+    fetchSummary(locationName).then((wiki) => {
+      if (wiki) {
+        setTimeout(() => {
+          showInfoPanel(wiki.title, wiki.extract, wiki.content_urls?.desktop.page)
+        }, 1500)
+      }
+    }).catch(() => { /* ignore */ })
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error)
     hideMapillaryLoading()

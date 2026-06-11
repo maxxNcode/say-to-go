@@ -119,14 +119,14 @@
             <div class="popular-section">
                 <h3>Popular Destinations</h3>
                 <div class="popular-tags" role="list">
-                    <button class="popular-tag" role="listitem" data-location="Eiffel Tower, Paris"><i data-lucide="map-pin" class="tag-icon"></i> Paris</button>
-                    <button class="popular-tag" role="listitem" data-location="Times Square, New York"><i data-lucide="map-pin" class="tag-icon"></i> New York</button>
-                    <button class="popular-tag" role="listitem" data-location="Shibuya Crossing, Tokyo"><i data-lucide="map-pin" class="tag-icon"></i> Tokyo</button>
-                    <button class="popular-tag" role="listitem" data-location="Big Ben, London"><i data-lucide="map-pin" class="tag-icon"></i> London</button>
-                    <button class="popular-tag" role="listitem" data-location="Sydney Opera House, Sydney"><i data-lucide="map-pin" class="tag-icon"></i> Sydney</button>
-                    <button class="popular-tag" role="listitem" data-location="Colosseum, Rome"><i data-lucide="map-pin" class="tag-icon"></i> Rome</button>
-                    <button class="popular-tag" role="listitem" data-location="Dubai Marina, Dubai"><i data-lucide="map-pin" class="tag-icon"></i> Dubai</button>
-                    <button class="popular-tag" role="listitem" data-location="Sagrada Familia, Barcelona"><i data-lucide="map-pin" class="tag-icon"></i> Barcelona</button>
+                    <button class="popular-tag" role="listitem" data-location="Eiffel Tower, Paris"><i data-lucide="landmark" class="tag-icon"></i> Paris</button>
+                    <button class="popular-tag" role="listitem" data-location="Times Square, New York"><i data-lucide="building" class="tag-icon"></i> New York</button>
+                    <button class="popular-tag" role="listitem" data-location="Shibuya Crossing, Tokyo"><i data-lucide="compass" class="tag-icon"></i> Tokyo</button>
+                    <button class="popular-tag" role="listitem" data-location="Big Ben, London"><i data-lucide="castle" class="tag-icon"></i> London</button>
+                    <button class="popular-tag" role="listitem" data-location="Sydney Opera House, Sydney"><i data-lucide="ship" class="tag-icon"></i> Sydney</button>
+                    <button class="popular-tag" role="listitem" data-location="Colosseum, Rome"><i data-lucide="landmark" class="tag-icon"></i> Rome</button>
+                    <button class="popular-tag" role="listitem" data-location="Dubai Marina, Dubai"><i data-lucide="building" class="tag-icon"></i> Dubai</button>
+                    <button class="popular-tag" role="listitem" data-location="Sagrada Familia, Barcelona"><i data-lucide="church" class="tag-icon"></i> Barcelona</button>
                 </div>
             </div>
 
@@ -136,7 +136,12 @@
                 <div id="recent-tags" class="recent-tags" role="list"></div>
             </div>
 
+            <button id="surprise-btn" class="surprise-btn" aria-label="Surprise me with a random location">
+                <i data-lucide="sparkles" class="tag-icon"></i> Surprise Me
+            </button>
+
             <p class="hint-text">SAY TO GO works best with specific cities and landmarks.</p>
+            <p class="key-hint">Space to speak · Esc to go back</p>
         </main>
 
         <!-- Mapillary 360° Container -->
@@ -144,10 +149,25 @@
             <div id="mapillary"></div>
         </div>
 
+        <!-- Portal Teleport Overlay -->
+        <div id="portal-overlay" class="portal-overlay hidden" aria-hidden="true">
+            <div class="portal-ring"></div>
+            <div class="portal-ring portal-ring--inner"></div>
+            <div class="portal-text">Teleporting...</div>
+        </div>
+
         <!-- Mapillary Loading Overlay -->
         <div id="mapillary-loading" class="mapillary-loading hidden" role="status">
             <div class="spinner" aria-hidden="true"></div>
             <p>Loading experience...</p>
+        </div>
+
+        <!-- Wikipedia Info Panel -->
+        <div id="info-panel" class="info-panel hidden">
+            <button id="info-panel-close" class="info-panel-close" aria-label="Close info">✕</button>
+            <h3 id="info-panel-title"></h3>
+            <p id="info-panel-body"></p>
+            <a id="info-panel-link" class="info-panel-link" href="#" target="_blank" rel="noopener">Read more on Wikipedia →</a>
         </div>
 
         <!-- Error Message -->

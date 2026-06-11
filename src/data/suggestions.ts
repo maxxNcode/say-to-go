@@ -16,3 +16,15 @@ export const REGION_TIPS: Record<string, string> = {
   'asia': 'Try specific cities like Tokyo or Bangkok',
   'europe': 'Try specific cities like Paris or London',
 }
+
+/** Random location picker */
+export const POPULAR_LOCATIONS = [
+  'Eiffel Tower, Paris',
+  'Times Square, New York',
+  'Shibuya Crossing, Tokyo',
+  'Big Ben, London',
+  'Sydney Opera House, Sydney',
+  'Colosseum, Rome',
+  'Dubai Marina, Dubai',
+  'Sagrada Familia, Barcelona',
+]
