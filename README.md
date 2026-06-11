@@ -109,7 +109,7 @@ The project includes a `vercel.json` configured for Vite builds:
 Any static host works:
 ```bash
 npm run build      # Produces dist/
-# Deploy dist/ to Netlify, GitHub Pages, Firebase, etc.
+# Deploy dist/ to GitHub Pages, Firebase, etc.
 ```
 
 Set the `VITE_MAPILLARY_TOKEN` environment variable on your hosting platform.
