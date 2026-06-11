@@ -50,9 +50,8 @@ async function fetchMapillary(url: string, retries = MAX_RETRIES): Promise<Respo
   return null
 }
 
-async function findSingleImage(lat: number, lon: number, bboxSize: number, token: string): Promise<string | null> {
-  const bbox = `${lon - bboxSize},${lat - bboxSize},${lon + bboxSize},${lat + bboxSize}`
-  const url = `${MAPILLARY_BASE}/images?access_token=${token}&fields=id&bbox=${bbox}&limit=1`
+async function findSingleImage(lat: number, lon: number, radiusMeters: number, token: string): Promise<string | null> {
+  const url = `${MAPILLARY_BASE}/images?access_token=${token}&fields=id&lat=${lat}&lng=${lon}&radius=${radiusMeters}&limit=1`
 
   const res = await fetchMapillary(url)
   if (!res) return null
@@ -64,8 +63,8 @@ async function findSingleImage(lat: number, lon: number, bboxSize: number, token
 export async function checkMapillaryCoverage(lat: number, lon: number): Promise<boolean> {
   try {
     const token = getAccessToken()
-    for (const size of [0.001, 0.005, 0.01, 0.02, 0.05, 0.1]) {
-      const id = await findSingleImage(lat, lon, size, token)
+    for (const radius of [50, 100, 250, 500, 1000]) {
+      const id = await findSingleImage(lat, lon, radius, token)
       if (id) return true
     }
     return false
@@ -78,8 +77,8 @@ export async function findImage(lat: number, lon: number): Promise<{ id: string;
   const token = getAccessToken()
   if (!token) throw new Error('Mapillary API token is not configured')
 
-  for (const size of [0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2]) {
-    const id = await findSingleImage(lat, lon, size, token)
+  for (const radius of [50, 100, 250, 500, 1000]) {
+    const id = await findSingleImage(lat, lon, radius, token)
     if (id) return { id, lat, lon }
   }
 
@@ -104,7 +103,7 @@ export async function findNearestCityWithImagery(
       for (const city of cities) {
         const cLat = parseFloat(city.lat)
         const cLon = parseFloat(city.lon)
-        const id = await findSingleImage(cLat, cLon, 0.01, token)
+        const id = await findSingleImage(cLat, cLon, 500, token)
         if (id) {
           return { lat: cLat, lon: cLon, name: `${city.display_name} (near ${originalName})` }
         }
@@ -132,7 +131,7 @@ export async function findNearbyAreaWith360View(
     const nLat = lat + dLat
     const nLon = lon + dLon
     try {
-      const id = await findSingleImage(nLat, nLon, 0.001, token)
+      const id = await findSingleImage(nLat, nLon, 100, token)
       if (!id) continue
 
       try {
