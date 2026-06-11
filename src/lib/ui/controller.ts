@@ -1,4 +1,4 @@
-import { createIcons } from 'lucide'
+import { createIcons, ArrowLeft } from 'lucide'
 import { $ } from './dom'
 import { destroyViewer, getCurrentLocation } from '../state'
 
@@ -131,5 +131,5 @@ export function addViewerButtons(opts: ViewerButtonsOptions): void {
   wrapper.appendChild(backBtn)
   wrapper.appendChild(nearBtn)
   document.body.appendChild(wrapper)
-  createIcons()
+  createIcons({ icons: { ArrowLeft } })
 }
