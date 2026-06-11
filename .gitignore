@@ -118,6 +118,9 @@ public/
 # Configuration files
 /config.js
 
+# Root style.css is a duplicate of src/style.css (leftover from pre-Vite era)
+/style.css
+
 # npm
 package-lock.json
 
