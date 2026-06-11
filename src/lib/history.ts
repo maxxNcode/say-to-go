@@ -33,7 +33,7 @@ export function renderRecentSearches(onSelect: (term: string) => void): void {
   recentSection.classList.remove('hidden')
   history.forEach((term) => {
     const tag = document.createElement('button')
-    tag.className = 'tag'
+    tag.className = 'recent-tag'
     tag.textContent = term
     tag.addEventListener('click', () => onSelect(term))
     recentTags.appendChild(tag)
