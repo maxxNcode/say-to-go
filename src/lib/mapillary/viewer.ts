@@ -124,8 +124,7 @@ export async function showMapillaryView(lat: number, lon: number, locationName: 
 
     await new Promise((r) => setTimeout(r, 100))
 
-    const token = getAccessToken()
-    const image = await findImage(lat, lon)
+    const [token, image] = await Promise.all([getAccessToken(), findImage(lat, lon)])
     if (!image) {
       setStatus(`No imagery at "${locationName}", searching nearby...`)
       const nearby = await findNearestCityWithImagery(lat, lon, locationName)

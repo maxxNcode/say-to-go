@@ -2,10 +2,18 @@ export const NOMINATIM_HEADERS = {
   'User-Agent': 'SAY TO GO App/2.0',
 }
 
-export function getAccessToken(): string {
-  const token = import.meta.env.VITE_MAPILLARY_TOKEN as string | undefined
-  if (!token || token === 'YOUR_MAPILLARY_ACCESS_TOKEN_HERE') {
-    console.warn('Mapillary token not configured. Set VITE_MAPILLARY_TOKEN in .env')
+let cachedToken: string | null = null
+
+export async function getAccessToken(): Promise<string> {
+  if (cachedToken) return cachedToken
+
+  try {
+    const res = await fetch('/api/mapillary-token')
+    if (!res.ok) return ''
+    const data = await res.json() as { token: string }
+    cachedToken = data.token
+    return data.token
+  } catch {
+    return ''
   }
-  return token ?? ''
 }
