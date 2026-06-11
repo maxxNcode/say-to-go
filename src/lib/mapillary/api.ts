@@ -1,99 +1,32 @@
-import { getAccessToken } from '../env'
-
-const MAPILLARY_BASE = 'https://graph.mapillary.com'
-const TIMEOUT_MS = 15000
-const MAX_RETRIES = 2
-
-async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutMs = TIMEOUT_MS): Promise<Response> {
-  const controller = new AbortController()
-  const id = setTimeout(() => controller.abort(), timeoutMs)
-  try {
-    const res = await fetch(url, { ...options, signal: controller.signal })
-    return res
-  } finally {
-    clearTimeout(id)
-  }
-}
-
-async function fetchMapillary(url: string, retries = MAX_RETRIES): Promise<Response | null> {
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const res = await fetchWithTimeout(url)
-      if (res.ok) return res
-
-      if (res.status === 400) {
-        const text = await res.text()
-        if (text.includes('OAuthException') || text.includes('access_token')) {
-          throw new Error('Mapillary API token is invalid or expired.')
-        }
-        return null
-      }
-
-      if (res.status >= 500) {
-        if (attempt < retries) {
-          await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
-          continue
-        }
-        throw new Error('Mapillary API is temporarily unavailable. Please try again later.')
-      }
-
-      return null
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError' && attempt < retries) {
-        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
-        continue
-      }
-      if (err instanceof Error && (err.message.includes('invalid') || err.message.includes('OAuth'))) throw err
-      if (attempt >= retries) return null
-    }
-  }
-  return null
-}
-
-async function findSingleImage(lat: number, lon: number, radiusMeters: number, token: string): Promise<string | null> {
-  const url = `${MAPILLARY_BASE}/images?access_token=${token}&fields=id&lat=${lat}&lng=${lon}&radius=${radiusMeters}&limit=1`
-
-  const res = await fetchMapillary(url)
-  if (!res) return null
-
+async function findSingleImage(lat: number, lon: number, radiusMeters: number): Promise<string | null> {
+  const res = await fetch(`/api/mapillary?lat=${lat}&lng=${lon}&radius=${radiusMeters}`)
+  if (!res.ok) return null
   const data = await res.json()
-  return data.data?.length > 0 ? data.data[0].id : null
+  return data.id ?? null
 }
 
 export async function checkMapillaryCoverage(lat: number, lon: number): Promise<boolean> {
-  try {
-    const token = getAccessToken()
-    for (const radius of [50, 100, 250, 500, 1000]) {
-      const id = await findSingleImage(lat, lon, radius, token)
-      if (id) return true
-    }
-    return false
-  } catch {
-    return false
+  for (const radius of [50, 100, 250, 500, 1000]) {
+    const id = await findSingleImage(lat, lon, radius)
+    if (id) return true
   }
+  return false
 }
 
 export async function findImage(lat: number, lon: number): Promise<{ id: string; lat: number; lon: number } | null> {
-  const token = getAccessToken()
-  if (!token) throw new Error('Mapillary API token is not configured')
-
   for (const radius of [50, 100, 250, 500, 1000]) {
-    const id = await findSingleImage(lat, lon, radius, token)
+    const id = await findSingleImage(lat, lon, radius)
     if (id) return { id, lat, lon }
   }
-
   return null
 }
 
 export async function findNearestCityWithImagery(
   lat: number, lon: number, originalName: string,
 ): Promise<{ lat: number; lon: number; name: string } | null> {
-  const token = getAccessToken()
-  if (!token) return null
-
   for (const radius of [0.1, 0.2, 0.5, 1.0, 2.0]) {
     try {
-      const res = await fetchWithTimeout(
+      const res = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=city&bounded=1` +
         `&viewbox=${lon - radius},${lat - radius},${lon + radius},${lat + radius}&limit=5`,
         { headers: { 'User-Agent': 'SAY TO GO App/2.0' } },
@@ -103,13 +36,13 @@ export async function findNearestCityWithImagery(
       for (const city of cities) {
         const cLat = parseFloat(city.lat)
         const cLon = parseFloat(city.lon)
-        const id = await findSingleImage(cLat, cLon, 500, token)
+        const id = await findSingleImage(cLat, cLon, 500)
         if (id) {
           return { lat: cLat, lon: cLon, name: `${city.display_name} (near ${originalName})` }
         }
       }
-    } catch (e) {
-      if (e instanceof Error && (e.message.includes('invalid') || e.message.includes('OAuth'))) throw e
+    } catch {
+      /* ignore */
     }
   }
   return null
@@ -118,9 +51,6 @@ export async function findNearestCityWithImagery(
 export async function findNearbyAreaWith360View(
   lat: number, lon: number, originalName: string,
 ): Promise<{ lat: number; lon: number; name: string } | null> {
-  const token = getAccessToken()
-  if (!token) return null
-
   const offsets = [
     [0.001, 0.001], [-0.001, -0.001], [0.001, -0.001], [-0.001, 0.001],
     [0.002, 0.002], [-0.002, -0.002], [0.002, -0.002], [-0.002, 0.002],
@@ -131,11 +61,11 @@ export async function findNearbyAreaWith360View(
     const nLat = lat + dLat
     const nLon = lon + dLon
     try {
-      const id = await findSingleImage(nLat, nLon, 100, token)
+      const id = await findSingleImage(nLat, nLon, 100)
       if (!id) continue
 
       try {
-        const rev = await fetchWithTimeout(
+        const rev = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${nLat}&lon=${nLon}`,
           { headers: { 'User-Agent': 'SAY TO GO App/2.0' } },
         )
